@@ -1,0 +1,193 @@
+/* Reset & base */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #121212;
+  color: #fff;
+}
+
+/* App container */
+.app {
+  max-width: 1400px;
+  margin: auto;
+  padding: 20px;
+}
+
+/* Top controls: search left, piles center, trackers right */
+.top-controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+/* Search container aligns left */
+.search-container {
+  flex: 1 1 200px;
+}
+
+/* Pile nav centers */
+.pile-nav {
+  display: flex;
+  gap: 12px;
+  flex: 1 1 auto;
+  justify-content: center;
+}
+
+/* Trackers align right */
+.trackers {
+  display: flex;
+  gap: 16px;
+  flex: 1 1 200px;
+  justify-content: flex-end;
+}
+
+/* Pile Buttons */
+.pile-btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  background: #1f1f1f;
+  color: #ccc;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+}
+
+.pile-btn:hover {
+  background: #2a2a2a;
+  color: #fff;
+}
+
+.pile-btn.active {
+  background: #ff6f61;
+  color: #fff;
+  box-shadow: 0 4px 10px rgba(255,111,97,0.6);
+}
+
+.pile-btn.drag-over {
+  background: #ffb74d;
+  color: #000;
+}
+
+/* Image Grid */
+.image-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 18px;
+  justify-items: center;
+  padding-top: 20px;
+}
+
+/* Image Cards */
+.image-card {
+  width: 220px;
+  height: 320px;
+  border-radius: 12px;
+  overflow: hidden;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+  transition: transform 0.15s ease, box-shadow 0.15s ease, border 0.15s ease;
+}
+
+.image-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.7);
+}
+
+/* Selected card highlight */
+.image-card.selected {
+  border: 3px solid #ff6f61;
+  box-shadow: 0 0 15px #ff6f61aa;
+}
+
+/* Images inside cards */
+.image-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+  background: #1f1f1f;
+}
+
+/* Trackers (Health / XP) */
+.tracker {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 0.9rem;
+  color: #ccc;
+}
+
+.tracker label {
+  margin-bottom: 4px;
+}
+
+.tracker input[type="number"] {
+  width: 60px;
+  padding: 6px 8px;
+  border-radius: 6px;
+  border: 1px solid #444;
+  background: #1f1f1f;
+  color: #fff;
+  text-align: center;
+  font-weight: 600;
+  cursor: pointer;
+  transition: border 0.2s, background 0.2s, box-shadow 0.2s;
+}
+
+.tracker input[type="number"]:hover {
+  border-color: #ff6f61;
+}
+
+.tracker input[type="number"]:focus {
+  outline: none;
+  border-color: #ff6f61;
+  box-shadow: 0 0 5px #ff6f61aa;
+}
+
+/* Style number input arrows (Webkit / Chrome / Safari) */
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  appearance: none;
+  background-color: #787878;
+  width: 16px;
+  height: 16px;
+  border-radius: 3px;
+  border: 1px solid #444;
+  color: #ff6f61;
+  cursor: pointer;
+  margin: 0 2px;
+}
+
+/* Search Bar */
+#card-search {
+  width: 100%;
+  max-width: 400px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid #444;
+  background: #1f1f1f;
+  color: #fff;
+  font-size: 1rem;
+  transition: border 0.2s, box-shadow 0.2s;
+}
+
+#card-search::placeholder {
+  color: #888;
+}
+
+#card-search:focus {
+  outline: none;
+  border-color: #ff6f61;
+  box-shadow: 0 0 6px #ff6f61aa;
+}
