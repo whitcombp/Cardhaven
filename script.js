@@ -30,7 +30,6 @@ const pileButtons = document.querySelectorAll(".pile-btn");
 const healthInput = document.getElementById("health");
 const xpInput = document.getElementById("xp");
 
-// Optional: event listeners for up/down arrows or value changes
 healthInput.addEventListener("input", () => {
   if (healthInput.value < 0) healthInput.value = 0;
 });
@@ -43,24 +42,50 @@ const searchInput = document.getElementById("card-search");
 let currentSearch = "";
 
 searchInput.addEventListener("input", (e) => {
-    currentSearch = e.target.value.toLowerCase();
-    renderCurrentPile();
-  });
+  currentSearch = e.target.value.toLowerCase();
+  renderCurrentPile();
+});
+
+// ===============================
+// CLEARING AND SAVING FAVORITES
+// ===============================
+
+const saveFavoritesBtn = document.getElementById("save-favorites");
+const clearFavoritesBtn = document.getElementById("clear-favorites");
+
+saveFavoritesBtn.addEventListener("click", () => {
+  const favoriteCards = cards.filter(card => card.favorite);
+  if (favoriteCards.length === 0) return;
+
+  const favoriteNames = favoriteCards.map(card => card.name.slice(0, -1)).join("\n"); // remove appended level value
+  
+  const blob = new Blob([favoriteNames], { type: "text/plain" });
+  const url = URL.createObjectURL(blob);
+
+  window.open(url, "_blank");
+});
+
+clearFavoritesBtn.addEventListener("click", () => {
+  cards.forEach(card => card.favorite = false);
+  renderCurrentPile();
+});
+
 
 // ===============================
 // LOAD CARD DATA
 // ===============================
 
 async function loadCards() {
-    const response = await fetch("cards.json");
-    const data = await response.json();
-  
-    cards = data.map((cardObj, index) => ({
-      id: index + 1,
-      name: cardObj.name,
-      level: cardObj.level,
-      image: cardObj.filename
-    }));
+  const response = await fetch("cards.json");
+  const data = await response.json();
+
+  cards = data.map((cardObj, index) => ({
+    id: index + 1,
+    name: cardObj.name,
+    level: Number(cardObj.level),
+    image: cardObj.filename,
+    favorite: cardObj.favorite === true
+  }));
 
   piles.library = [...cards];
   renderCurrentPile();
@@ -75,45 +100,50 @@ function renderCurrentPile() {
 
   piles[currentPile]
     .filter(card => card.name.toLowerCase().includes(currentSearch))
-    .sort((a, b) => a.level - b.level)
+    .sort((a, b) => a.level - b.level || a.name.toLowerCase().localeCompare(b.name.toLowerCase())) // sorts alphabetically if level is the same
     .forEach(card => {
-    const cardEl = document.createElement("div");
-    cardEl.className = "image-card";
-    cardEl.draggable = true;
-    cardEl.dataset.cardId = card.id;
+      const cardEl = document.createElement("div");
+      cardEl.className = "image-card";
+      cardEl.draggable = true;
+      cardEl.dataset.cardId = card.id;
 
-    if (selectedCardIds.has(card.id)) {
-      cardEl.classList.add("selected");
-    }
+      if (selectedCardIds.has(card.id)) {
+        cardEl.classList.add("selected");
+      }
 
-    cardEl.innerHTML = `
-      <img src="${card.image}" alt="${card.name}">
-      <div class="image-label">${card.name}</div>
-    `;
+      cardEl.innerHTML = `
+        <div class="favorite-icon ${card.favorite ? "active" : ""}"></div>
+        <img src="${card.image}" alt="${card.name}">
+      `;
 
-    cardEl.addEventListener("click", (e) => {
-      onCardClick(e, card.id);
-    });
+      cardEl.addEventListener("click", (e) => {
+        onCardClick(e, card.id);
+      });
 
-    cardEl.addEventListener("dragstart", (e) => {
+      const favIcon = cardEl.querySelector(".favorite-icon");
+      favIcon.addEventListener("click", (e) => {
+        e.stopPropagation();
+        card.favorite = !card.favorite;
+        favIcon.classList.toggle("active");
+      });
+
+      cardEl.addEventListener("dragstart", (e) => {
         draggedCardId = card.id;
-      
-        // If the dragged card isn't selected, drag only that card
+
         if (!selectedCardIds.has(card.id)) {
-        //   clearSelection();
           selectedCardIds.add(card.id);
-        //   renderCurrentPile();
         }
-      
+
         e.dataTransfer.effectAllowed = "move";
       });
-      
+
       cardEl.addEventListener("dragend", () => {
         draggedCardId = null;
       });
 
-    pileContainer.appendChild(cardEl);
-  });
+      pileContainer.appendChild(cardEl);
+    });
+
   updatePileButtons();
 }
 
@@ -122,7 +152,6 @@ function renderCurrentPile() {
 // ===============================
 
 function onCardClick(event, cardId) {
-  // Modifier shortcuts
   if (event.shiftKey) {
     moveSingleCard(cardId, "hand");
     return;
@@ -133,7 +162,6 @@ function onCardClick(event, cardId) {
     return;
   }
 
-  // Normal selection toggle
   toggleCardSelection(cardId);
 }
 
@@ -195,62 +223,49 @@ function moveSelectedCards(toPile) {
 
 pileButtons.forEach(btn => {
 
-    // -------------------------------
-    // CLICK: navigate OR move selected
-    // -------------------------------
-    btn.addEventListener("click", () => {
-      const targetPile = btn.dataset.pile;
-  
-      if (selectedCardIds.size > 0) {
-        moveSelectedCards(targetPile);
-      } else if (currentPile !== targetPile) {
-        currentPile = targetPile;
-        clearSelection();
-        renderCurrentPile();
-      }
-    });
-  
-    // -------------------------------
-    // DRAG OVER: allow drop
-    // -------------------------------
-    btn.addEventListener("dragover", (e) => {
-      e.preventDefault(); // REQUIRED for drop to work
-      btn.classList.add("drag-over");
-    });
-  
-    // -------------------------------
-    // DRAG LEAVE: visual cleanup
-    // -------------------------------
-    btn.addEventListener("dragleave", () => {
-      btn.classList.remove("drag-over");
-    });
-  
-    // -------------------------------
-    // DROP: move dragged / selected
-    // -------------------------------
-    btn.addEventListener("drop", (e) => {
-      e.preventDefault();
-      btn.classList.remove("drag-over");
-  
-      const targetPile = btn.dataset.pile;
-  
-      if (selectedCardIds.size > 0) {
-        moveSelectedCards(targetPile);
-      } else if (draggedCardId !== null) {
-        moveSingleCard(draggedCardId, targetPile);
-      }
-    });
+  btn.addEventListener("click", () => {
+    const targetPile = btn.dataset.pile;
+
+    if (selectedCardIds.size > 0) {
+      moveSelectedCards(targetPile);
+    } else if (currentPile !== targetPile) {
+      currentPile = targetPile;
+      clearSelection();
+      renderCurrentPile();
+    }
   });
-  
+
+  btn.addEventListener("dragover", (e) => {
+    e.preventDefault();
+    btn.classList.add("drag-over");
+  });
+
+  btn.addEventListener("dragleave", () => {
+    btn.classList.remove("drag-over");
+  });
+
+  btn.addEventListener("drop", (e) => {
+    e.preventDefault();
+    btn.classList.remove("drag-over");
+
+    const targetPile = btn.dataset.pile;
+
+    if (selectedCardIds.size > 0) {
+      moveSelectedCards(targetPile);
+    } else if (draggedCardId !== null) {
+      moveSingleCard(draggedCardId, targetPile);
+    }
+  });
+});
 
 function updatePileButtons() {
-pileButtons.forEach(btn => {
+  pileButtons.forEach(btn => {
     const pileName = btn.dataset.pile;
     btn.classList.toggle("active", pileName === currentPile);
 
     const countSpan = btn.querySelector(".pile-count");
     countSpan.textContent = `(${piles[pileName].length})`;
-});
+  });
 }
 
 // ===============================

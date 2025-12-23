@@ -8,55 +8,40 @@
 </head>
 <body>
 
-  <div class="app">
+<div class="app">
 
-    <header class="header">
-        <h1>Cardhaven</h1>
-      
-        <!-- Top controls row -->
-        <div class="top-controls">
-          <!-- Search Bar -->
-          <div class="search-container">
-            <input type="text" id="card-search" placeholder="Search cards by name..." />
-          </div>
-      
-          <!-- Pile Navigation -->
-          <nav class="pile-nav">
-            <button class="pile-btn active" data-pile="library">
-              Library <span class="pile-count"></span>
-            </button>
-            <button class="pile-btn" data-pile="hand">
-              Hand <span class="pile-count"></span>
-            </button>
-            <button class="pile-btn" data-pile="discard">
-              Discard <span class="pile-count"></span>
-            </button>
-            <button class="pile-btn" data-pile="exhaust">
-              Exhaust <span class="pile-count"></span>
-            </button>
-          </nav>
-      
-          <!-- Trackers -->
-          <div class="trackers">
-            <div class="tracker">
-              <label for="health">Health</label>
-              <input type="number" id="health" min="0" value="20">
-            </div>
-            <div class="tracker">
-              <label for="xp">XP</label>
-              <input type="number" id="xp" min="0" value="0">
-            </div>
-          </div>
-        </div>
-      </header>
-      
+  <header class="header">
+    <h1 class="title">Cardhaven</h1>
+    <input type="text" id="card-search" placeholder="Search cards by name..." />
+    <div class="search-actions">
+      <button id="save-favorites">Save Favorites</button>
+      <button id="clear-favorites">Clear Favorites</button>
+    </div>
+  </header>
 
-    <!-- Active Pile View -->
-    <main class="image-grid" id="pile-container">
-      <!-- Cards rendered here -->
-    </main>
+  <div class="sticky-bar">
+    <nav class="pile-nav">
+      <button class="pile-btn active" data-pile="library">Library <span class="pile-count"></span></button>
+      <button class="pile-btn" data-pile="hand">Hand <span class="pile-count"></span></button>
+      <button class="pile-btn" data-pile="discard">Discard <span class="pile-count"></span></button>
+      <button class="pile-btn" data-pile="exhaust">Exhaust <span class="pile-count"></span></button>
+    </nav>
 
+    <div class="trackers">
+      <div class="tracker">
+        <label>Health</label>
+        <input type="number" id="health" min="0" value="20">
+      </div>
+      <div class="tracker">
+        <label>XP</label>
+        <input type="number" id="xp" min="0" value="0">
+      </div>
+    </div>
   </div>
+
+  <main class="image-grid" id="pile-container"></main>
+
+</div>
 
 </body>
 </html>
