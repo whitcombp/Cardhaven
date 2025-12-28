@@ -129,7 +129,9 @@ function renderDeck() {
 function renderDrawnPile() {
   drawnStack.innerHTML = "";
 
-  displayDrawPile.forEach(card => {
+  reversed = displayDrawPile.toReversed()
+
+  reversed.forEach(card => {
     const cardEl = document.createElement("div");
     cardEl.className = "image-card";
 

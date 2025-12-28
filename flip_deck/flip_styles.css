@@ -44,7 +44,7 @@ body {
 .main-board {
   display: flex;
   width: 100%;
-  height: calc(100vh - 120px); /* header + padding approx */
+  height: calc(100vh - 120px);
   gap: 32px;
 }
 
@@ -99,7 +99,6 @@ body {
   align-items: center;
 }
 
-/* Default */
 #reshuffle-button {
   background: #1f1f1f;
   color: #ccc;
@@ -116,13 +115,11 @@ body {
   color: #fff;
 }
 
-/* Active / cue state */
 #reshuffle-button.reshuffle-needed {
   background: #ff6f61;
   color: #fff;
   box-shadow: 0 4px 12px rgba(255, 111, 97, 0.6);
 }
-
 
 /* Helper Buttons */
 .flip-helper-button {
@@ -150,20 +147,17 @@ body {
   gap: 6px;
   justify-items: center;
   width: 100%;
-  flex: 1; /* expand vertically to fill left column */
+  flex: 1;
   overflow-y: auto;
 }
 
-/* ============================= */
-/* Custom Scrollbar for Deck Grid */
-/* ============================= */
+/* Scrollbar for Deck Grid */
 .image-grid {
-  overflow-y: auto; /* ensure scrollable */
-  scrollbar-width: thin;           /* Firefox */
-  scrollbar-color: #ff6f61 #1f1f1f; /* Firefox thumb / track */
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #ff6f61 #1f1f1f;
 }
 
-/* WebKit browsers (Chrome, Edge, Safari) */
 .image-grid::-webkit-scrollbar {
   width: 10px;
 }
@@ -176,13 +170,12 @@ body {
 .image-grid::-webkit-scrollbar-thumb {
   background-color: #ff6f61;
   border-radius: 8px;
-  border: 2px solid #1f1f1f; /* adds padding effect */
+  border: 2px solid #1f1f1f;
 }
 
 .image-grid::-webkit-scrollbar-thumb:hover {
   background-color: #ff857a;
 }
-
 
 /* Right Column: Drawn Pile */
 .drawn-column {
@@ -190,8 +183,8 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  overflow-y: auto;
   height: 100%;
+  overflow: hidden;
 }
 
 .drawn-title {
@@ -203,26 +196,26 @@ body {
 
 /* Drawn Stack */
 .drawn-stack {
-  position: relative;
-  width: 220px;
-  flex: 1;
+  width: 100%;
   display: flex;
   flex-direction: column;
   gap: 12px;
-  overflow-y: auto;
   padding-bottom: 12px;
+  overflow-y: auto;
+  max-height: 100%;
 }
 
 /* Cards */
 .image-card {
-  position: relative;
-  width: 160px;
-  height: 100px;
+  width: 100%;
+  max-width: 180px;
+  height: 120px;
   border-radius: 6px;
   overflow: hidden;
   cursor: pointer;
   box-shadow: 0 4px 12px rgba(0,0,0,0.5);
   transition: transform 0.15s ease, box-shadow 0.15s ease;
+  flex-shrink: 0;
 }
 
 .image-card img {
@@ -232,7 +225,6 @@ body {
   background: #1f1f1f;
 }
 
-/* Selected Card Highlight */
 .image-card.selected {
   border: 3px solid #ff6f61;
   box-shadow: 0 0 15px #ff6f61aa;
