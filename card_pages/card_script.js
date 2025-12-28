@@ -57,8 +57,10 @@ saveFavoritesBtn.addEventListener("click", () => {
   const favoriteCards = cards.filter(card => card.favorite);
   if (favoriteCards.length === 0) return;
 
-  const favoriteNames = favoriteCards.map(card => card.name.slice(0, -1)).join("\n"); // remove appended level value
-  
+  const favoriteNames = favoriteCards
+  .map(card => card.name.replace(/\s*\d+(\.\d+)?$/, ''))
+  .join("\n");
+
   const blob = new Blob([favoriteNames], { type: "text/plain" });
   const url = URL.createObjectURL(blob);
 

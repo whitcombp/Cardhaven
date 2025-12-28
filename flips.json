@@ -1,0 +1,86 @@
+[
+    {
+        "card": "images\\doomstalker\\attack_modifiers\\+0_0.png",
+        "reshuffle": false
+    },
+    {
+        "card": "images\\doomstalker\\attack_modifiers\\+0_1.png",
+        "reshuffle": false
+    },
+    {
+        "card": "images\\doomstalker\\attack_modifiers\\+0_2.png",
+        "reshuffle": false
+    },
+    {
+        "card": "images\\doomstalker\\attack_modifiers\\+0_3.png",
+        "reshuffle": false
+    },
+    {
+        "card": "images\\doomstalker\\attack_modifiers\\+0_4.png",
+        "reshuffle": false
+    },
+    {
+        "card": "images\\doomstalker\\attack_modifiers\\+0_5.png",
+        "reshuffle": false
+    },
+    {
+        "card": "images\\doomstalker\\attack_modifiers\\+1_0.png",
+        "reshuffle": false
+    },
+    {
+        "card": "images\\doomstalker\\attack_modifiers\\+1_1.png",
+        "reshuffle": false
+    },
+    {
+        "card": "images\\doomstalker\\attack_modifiers\\+1_2.png",
+        "reshuffle": false
+    },
+    {
+        "card": "images\\doomstalker\\attack_modifiers\\+1_3.png",
+        "reshuffle": false
+    },
+    {
+        "card": "images\\doomstalker\\attack_modifiers\\+1_4.png",
+        "reshuffle": false
+    },
+    {
+        "card": "images\\doomstalker\\attack_modifiers\\+2.png",
+        "reshuffle": false
+    },
+    {
+        "card": "images\\doomstalker\\attack_modifiers\\-1 _1.png",
+        "reshuffle": false
+    },
+    {
+        "card": "images\\doomstalker\\attack_modifiers\\-1_0.png",
+        "reshuffle": false
+    },
+    {
+        "card": "images\\doomstalker\\attack_modifiers\\-1_2.png",
+        "reshuffle": false
+    },
+    {
+        "card": "images\\doomstalker\\attack_modifiers\\-1_3.png",
+        "reshuffle": false
+    },
+    {
+        "card": "images\\doomstalker\\attack_modifiers\\-1_4.png",
+        "reshuffle": false
+    },
+    {
+        "card": "images\\doomstalker\\attack_modifiers\\-2.png",
+        "reshuffle": false
+    },
+    {
+        "card": "images\\doomstalker\\attack_modifiers\\reflip_+1_1.png",
+        "reshuffle": false
+    },
+    {
+        "card": "images\\doomstalker\\attack_modifiers\\x0.png",
+        "reshuffle": true
+    },
+    {
+        "card": "images\\doomstalker\\attack_modifiers\\x2.png",
+        "reshuffle": true
+    }
+]

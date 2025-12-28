@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Fliphaven</title>
+  <link rel="stylesheet" href="flip_deck/flip_styles.css" />
+  <script src="flip_deck/flip_script.js" defer></script>
+</head>
+<body>
+
+<div class="app">
+
+  <!-- Header -->
+  <header class="header">
+    <h1 class="title">Fliphaven</h1>
+  </header>
+
+  <!-- Main Content -->
+  <main class="main-content">
+
+    <div class="main-board">
+
+      <!-- Left Column: Flip + Deck -->
+      <div class="left-column">
+
+        <!-- Controls Row -->
+        <div class="controls">
+
+          <!-- Left Helpers -->
+          <div class="controls-left">
+            <button class="flip-helper-button" id="bless-button">Bless</button>
+            <button class="flip-helper-button" id="curse-button">Curse</button>
+          </div>
+
+          <!-- Center Flip -->
+          <div class="controls-center">
+            <button id="flip-button" class="flip-button">Flip!</button>
+          </div>
+
+          <!-- Right Helper -->
+          <div class="controls-right">
+            <button class="flip-helper-button" id="reshuffle-button">Reshuffle</button>
+          </div>
+
+        </div>
+
+        <!-- Deck Grid -->
+        <div class="image-grid" id="pile-container"></div>
+
+      </div>
+
+      <!-- Right Column: Drawn Pile -->
+      <aside class="drawn-column">
+        <h2 class="drawn-title">Drawn:</h2>
+        <div class="drawn-stack" id="drawn-container"></div>
+      </aside>
+
+    </div>
+
+  </main>
+
+</div>
+
+</body>
+</html>

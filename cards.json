@@ -27,19 +27,19 @@
         "filename": "images\\doomstalker\\ability_cards\\1\\gut-shot.jpeg",
         "name": "gut shot1",
         "level": "1",
-        "favorite": true
+        "favorite": false
     },
     {
         "filename": "images\\doomstalker\\ability_cards\\1\\hidden-danger.jpeg",
         "name": "hidden danger1",
         "level": "1",
-        "favorite": false
+        "favorite": true
     },
     {
         "filename": "images\\doomstalker\\ability_cards\\1\\murderous-stalker.jpeg",
         "name": "murderous stalker1",
         "level": "1",
-        "favorite": false
+        "favorite": true
     },
     {
         "filename": "images\\doomstalker\\ability_cards\\1\\race-to-the-grave.jpeg",
@@ -57,31 +57,31 @@
         "filename": "images\\doomstalker\\ability_cards\\1\\solid-bow.jpeg",
         "name": "solid bow1",
         "level": "1",
-        "favorite": false
+        "favorite": true
     },
     {
         "filename": "images\\doomstalker\\ability_cards\\1\\the-hunt-begins.jpeg",
         "name": "the hunt begins1",
         "level": "1",
-        "favorite": false
+        "favorite": true
     },
     {
         "filename": "images\\doomstalker\\ability_cards\\1.5\\feral-aid.jpeg",
         "name": "feral aid1.5",
         "level": "1.5",
-        "favorite": false
+        "favorite": true
     },
     {
         "filename": "images\\doomstalker\\ability_cards\\1.5\\fierce-fighter.jpeg",
         "name": "fierce fighter1.5",
         "level": "1.5",
-        "favorite": false
+        "favorite": true
     },
     {
         "filename": "images\\doomstalker\\ability_cards\\1.5\\give-chase.jpeg",
         "name": "give chase1.5",
         "level": "1.5",
-        "favorite": false
+        "favorite": true
     },
     {
         "filename": "images\\doomstalker\\ability_cards\\2\\dual-shot.jpeg",

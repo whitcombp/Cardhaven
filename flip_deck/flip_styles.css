@@ -1,0 +1,239 @@
+/* ============================= */
+/* Reset & Base */
+/* ============================= */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: #121212;
+  color: #fff;
+  height: 100vh;
+}
+
+/* ============================= */
+/* App */
+/* ============================= */
+.app {
+  max-width: 1400px;
+  margin: auto;
+  padding: 20px;
+  height: 100%;
+}
+
+/* ============================= */
+/* Header */
+/* ============================= */
+.header {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 32px;
+}
+
+.title {
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+/* ============================= */
+/* Main Board Layout */
+/* ============================= */
+.main-board {
+  display: flex;
+  width: 100%;
+  height: calc(100vh - 120px); /* header + padding approx */
+  gap: 32px;
+}
+
+/* Left Column: Flip + Deck */
+.left-column {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+/* Controls */
+.controls {
+  display: grid;
+  grid-template-columns: auto auto auto;
+  align-items: center;
+  gap: 32px;
+  margin-bottom: 24px;
+}
+
+/* Left Buttons */
+.controls-left {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: flex-end;
+}
+
+/* Center Flip */
+.controls-center {
+  display: flex;
+  justify-content: center;
+}
+
+.flip-button {
+  border: none;
+  border-radius: 8px;
+  background: #ff6f61;
+  color: #fff;
+  padding: 18px 36px;
+  font-size: 1.3rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.flip-button:hover {
+  background: #ff857a;
+}
+
+/* Right Button */
+.controls-right {
+  display: flex;
+  align-items: center;
+}
+
+/* Default */
+#reshuffle-button {
+  background: #1f1f1f;
+  color: #ccc;
+  border-radius: 8px;
+  padding: 10px 20px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+  transition: background 0.2s, color 0.2s, transform 0.1s;
+}
+
+#reshuffle-button:hover {
+  background: #2a2a2a;
+  color: #fff;
+}
+
+/* Active / cue state */
+#reshuffle-button.reshuffle-needed {
+  background: #ff6f61;
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(255, 111, 97, 0.6);
+}
+
+
+/* Helper Buttons */
+.flip-helper-button {
+  border: none;
+  border-radius: 8px;
+  background: #1f1f1f;
+  color: #ccc;
+  cursor: pointer;
+  padding: 10px 20px;
+  font-weight: 600;
+  transition: background 0.2s, color 0.2s, transform 0.1s;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+}
+
+.flip-helper-button:hover {
+  background: #2a2a2a;
+  color: #fff;
+  transform: translateY(-1px);
+}
+
+/* Deck Grid */
+.image-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 6px;
+  justify-items: center;
+  width: 100%;
+  flex: 1; /* expand vertically to fill left column */
+  overflow-y: auto;
+}
+
+/* ============================= */
+/* Custom Scrollbar for Deck Grid */
+/* ============================= */
+.image-grid {
+  overflow-y: auto; /* ensure scrollable */
+  scrollbar-width: thin;           /* Firefox */
+  scrollbar-color: #ff6f61 #1f1f1f; /* Firefox thumb / track */
+}
+
+/* WebKit browsers (Chrome, Edge, Safari) */
+.image-grid::-webkit-scrollbar {
+  width: 10px;
+}
+
+.image-grid::-webkit-scrollbar-track {
+  background: #1f1f1f;
+  border-radius: 8px;
+}
+
+.image-grid::-webkit-scrollbar-thumb {
+  background-color: #ff6f61;
+  border-radius: 8px;
+  border: 2px solid #1f1f1f; /* adds padding effect */
+}
+
+.image-grid::-webkit-scrollbar-thumb:hover {
+  background-color: #ff857a;
+}
+
+
+/* Right Column: Drawn Pile */
+.drawn-column {
+  width: 260px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow-y: auto;
+  height: 100%;
+}
+
+.drawn-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 12px;
+  color: #ccc;
+}
+
+/* Drawn Stack */
+.drawn-stack {
+  position: relative;
+  width: 220px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  overflow-y: auto;
+  padding-bottom: 12px;
+}
+
+/* Cards */
+.image-card {
+  position: relative;
+  width: 160px;
+  height: 100px;
+  border-radius: 6px;
+  overflow: hidden;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.image-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  background: #1f1f1f;
+}
+
+/* Selected Card Highlight */
+.image-card.selected {
+  border: 3px solid #ff6f61;
+  box-shadow: 0 0 15px #ff6f61aa;
+}
