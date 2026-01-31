@@ -1,181 +1,163 @@
 [
     {
-        "filename": "images\\doomstalker\\ability_cards\\1\\a-moments-peace.jpeg",
-        "name": "a moments peace1",
-        "level": "1",
-        "favorite": true
-    },
-    {
-        "filename": "images\\doomstalker\\ability_cards\\1\\detonation.jpeg",
-        "name": "detonation1",
-        "level": "1",
-        "favorite": true
-    },
-    {
-        "filename": "images\\doomstalker\\ability_cards\\1\\foot-snare.jpeg",
-        "name": "foot snare1",
-        "level": "1",
-        "favorite": true
-    },
-    {
-        "filename": "images\\doomstalker\\ability_cards\\1\\forward-momentum.jpeg",
-        "name": "forward momentum1",
-        "level": "1",
-        "favorite": true
-    },
-    {
-        "filename": "images\\doomstalker\\ability_cards\\1\\gut-shot.jpeg",
-        "name": "gut shot1",
+        "filename": "images\\spellweaver\\ability_cards\\1\\aid-from-the-ether.jpeg",
+        "name": "aid from the ether1",
         "level": "1",
         "favorite": false
     },
     {
-        "filename": "images\\doomstalker\\ability_cards\\1\\hidden-danger.jpeg",
-        "name": "hidden danger1",
-        "level": "1",
-        "favorite": true
-    },
-    {
-        "filename": "images\\doomstalker\\ability_cards\\1\\murderous-stalker.jpeg",
-        "name": "murderous stalker1",
-        "level": "1",
-        "favorite": true
-    },
-    {
-        "filename": "images\\doomstalker\\ability_cards\\1\\race-to-the-grave.jpeg",
-        "name": "race to the grave1",
+        "filename": "images\\spellweaver\\ability_cards\\1\\arcane-bolt.jpeg",
+        "name": "arcane bolt1",
         "level": "1",
         "favorite": false
     },
     {
-        "filename": "images\\doomstalker\\ability_cards\\1\\rain-of-arrows.jpeg",
-        "name": "rain of arrows1",
+        "filename": "images\\spellweaver\\ability_cards\\1\\emberfrost.jpeg",
+        "name": "emberfrost1",
         "level": "1",
         "favorite": false
     },
     {
-        "filename": "images\\doomstalker\\ability_cards\\1\\solid-bow.jpeg",
-        "name": "solid bow1",
+        "filename": "images\\spellweaver\\ability_cards\\1\\fire-orbs.jpeg",
+        "name": "fire orbs1",
         "level": "1",
-        "favorite": true
+        "favorite": false
     },
     {
-        "filename": "images\\doomstalker\\ability_cards\\1\\the-hunt-begins.jpeg",
-        "name": "the hunt begins1",
+        "filename": "images\\spellweaver\\ability_cards\\1\\flame-strike.jpeg",
+        "name": "flame strike1",
         "level": "1",
-        "favorite": true
+        "favorite": false
     },
     {
-        "filename": "images\\doomstalker\\ability_cards\\1.5\\feral-aid.jpeg",
-        "name": "feral aid1.5",
+        "filename": "images\\spellweaver\\ability_cards\\1\\frost-strike.jpeg",
+        "name": "frost strike1",
+        "level": "1",
+        "favorite": false
+    },
+    {
+        "filename": "images\\spellweaver\\ability_cards\\1\\icy-blast.jpeg",
+        "name": "icy blast1",
+        "level": "1",
+        "favorite": false
+    },
+    {
+        "filename": "images\\spellweaver\\ability_cards\\1\\reviving-ether.jpeg",
+        "name": "reviving ether1",
+        "level": "1",
+        "favorite": false
+    },
+    {
+        "filename": "images\\spellweaver\\ability_cards\\1.5\\flameswell.jpeg",
+        "name": "flameswell1.5",
         "level": "1.5",
-        "favorite": true
+        "favorite": false
     },
     {
-        "filename": "images\\doomstalker\\ability_cards\\1.5\\fierce-fighter.jpeg",
-        "name": "fierce fighter1.5",
+        "filename": "images\\spellweaver\\ability_cards\\1.5\\ice-armor.jpeg",
+        "name": "ice armor1.5",
         "level": "1.5",
-        "favorite": true
+        "favorite": false
     },
     {
-        "filename": "images\\doomstalker\\ability_cards\\1.5\\give-chase.jpeg",
-        "name": "give chase1.5",
+        "filename": "images\\spellweaver\\ability_cards\\1.5\\impaling-eruption.jpeg",
+        "name": "impaling eruption1.5",
         "level": "1.5",
-        "favorite": true
+        "favorite": false
     },
     {
-        "filename": "images\\doomstalker\\ability_cards\\2\\dual-shot.jpeg",
-        "name": "dual shot2",
+        "filename": "images\\spellweaver\\ability_cards\\2\\etheric-echo.jpeg",
+        "name": "etheric echo2",
         "level": "2",
         "favorite": false
     },
     {
-        "filename": "images\\doomstalker\\ability_cards\\2\\relentless-offensive.jpeg",
-        "name": "relentless offensive2",
+        "filename": "images\\spellweaver\\ability_cards\\2\\freezing-nova.jpeg",
+        "name": "freezing nova2",
         "level": "2",
         "favorite": false
     },
     {
-        "filename": "images\\doomstalker\\ability_cards\\3\\swift-trickery.jpeg",
-        "name": "swift trickery3",
+        "filename": "images\\spellweaver\\ability_cards\\3\\artic-shards.jpeg",
+        "name": "artic shards3",
         "level": "3",
         "favorite": false
     },
     {
-        "filename": "images\\doomstalker\\ability_cards\\3\\walking-bastion.jpeg",
-        "name": "walking bastion3",
+        "filename": "images\\spellweaver\\ability_cards\\3\\heatwave.jpeg",
+        "name": "heatwave3",
         "level": "3",
         "favorite": false
     },
     {
-        "filename": "images\\doomstalker\\ability_cards\\4\\camouflage.jpeg",
-        "name": "camouflage4",
+        "filename": "images\\spellweaver\\ability_cards\\4\\cold-fire.jpeg",
+        "name": "cold fire4",
         "level": "4",
         "favorite": false
     },
     {
-        "filename": "images\\doomstalker\\ability_cards\\4\\coated-arrows.jpeg",
-        "name": "coated arrows4",
+        "filename": "images\\spellweaver\\ability_cards\\4\\dancing-gales.jpeg",
+        "name": "dancing gales4",
         "level": "4",
         "favorite": false
     },
     {
-        "filename": "images\\doomstalker\\ability_cards\\5\\expose.jpeg",
-        "name": "expose5",
+        "filename": "images\\spellweaver\\ability_cards\\5\\cool-down.jpeg",
+        "name": "cool down5",
         "level": "5",
         "favorite": false
     },
     {
-        "filename": "images\\doomstalker\\ability_cards\\5\\felling-swoop.jpeg",
-        "name": "felling swoop5",
+        "filename": "images\\spellweaver\\ability_cards\\5\\warm-up.jpeg",
+        "name": "warm up5",
         "level": "5",
         "favorite": false
     },
     {
-        "filename": "images\\doomstalker\\ability_cards\\6\\impending-end.jpeg",
-        "name": "impending end6",
+        "filename": "images\\spellweaver\\ability_cards\\6\\elemental-rays.jpeg",
+        "name": "elemental rays6",
         "level": "6",
         "favorite": false
     },
     {
-        "filename": "images\\doomstalker\\ability_cards\\6\\wild-command.jpeg",
-        "name": "wild command6",
+        "filename": "images\\spellweaver\\ability_cards\\6\\searing-glacier.jpeg",
+        "name": "searing glacier6",
         "level": "6",
         "favorite": false
     },
     {
-        "filename": "images\\doomstalker\\ability_cards\\7\\charging-beast.jpeg",
-        "name": "charging beast7",
+        "filename": "images\\spellweaver\\ability_cards\\7\\chromatic-explosion.jpeg",
+        "name": "chromatic explosion7",
         "level": "7",
         "favorite": false
     },
     {
-        "filename": "images\\doomstalker\\ability_cards\\7\\darkened-skies.jpeg",
-        "name": "darkened skies7",
+        "filename": "images\\spellweaver\\ability_cards\\7\\spell-mastery.jpeg",
+        "name": "spell mastery7",
         "level": "7",
         "favorite": false
     },
     {
-        "filename": "images\\doomstalker\\ability_cards\\8\\feral-instincts.jpeg",
-        "name": "feral instincts8",
+        "filename": "images\\spellweaver\\ability_cards\\8\\frostflare-orbs.jpeg",
+        "name": "frostflare orbs8",
         "level": "8",
         "favorite": false
     },
     {
-        "filename": "images\\doomstalker\\ability_cards\\8\\press-the-attack.jpeg",
-        "name": "press the attack8",
+        "filename": "images\\spellweaver\\ability_cards\\8\\twin-beams.jpeg",
+        "name": "twin beams8",
         "level": "8",
         "favorite": false
     },
     {
-        "filename": "images\\doomstalker\\ability_cards\\9\\heart-of-doom.jpeg",
-        "name": "heart of doom9",
+        "filename": "images\\spellweaver\\ability_cards\\9\\freezing-vortex.jpeg",
+        "name": "freezing vortex9",
         "level": "9",
         "favorite": false
     },
     {
-        "filename": "images\\doomstalker\\ability_cards\\9\\predator-and-prey.jpeg",
-        "name": "predator and prey9",
+        "filename": "images\\spellweaver\\ability_cards\\9\\inferno.jpeg",
+        "name": "inferno9",
         "level": "9",
         "favorite": false
     }
