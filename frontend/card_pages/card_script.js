@@ -26,6 +26,33 @@ const pileContainer = document.getElementById("pile-container");
 const pileButtons = document.querySelectorAll(".pile-btn");
 
 // ===============================
+// AUTH
+// ===============================
+
+const token = localStorage.getItem("token");
+const userId = localStorage.getItem("user_id");
+const username = localStorage.getItem("username");
+
+if (!token) {
+  window.location.href = "/login.html";
+}
+
+function authHeaders() {
+  return {
+    "Content-Type": "application/json",
+    "Authorization": `Bearer ${token}`
+  };
+}
+
+function postActivity(event_type, payload) {
+  fetch("/activity", {
+    method: "POST",
+    headers: authHeaders(),
+    body: JSON.stringify({ event_type, payload })
+  }).catch(() => {}); // fire and forget
+}
+
+// ===============================
 // CHARACTER SELECTOR
 // ===============================
 
@@ -33,7 +60,7 @@ const characterSelect = document.getElementById("character-select");
 const loadCharacterBtn = document.getElementById("load-character");
 
 async function loadCharacters() {
-  const response = await fetch("/characters");
+  const response = await fetch("/characters", { headers: authHeaders() });
   const characters = await response.json();
 
   characters.forEach(char => {
@@ -62,7 +89,7 @@ loadCharacterBtn.addEventListener("click", () => {
 });
 
 // ===============================
-// SEARCH AND HEALTH / XP TRACKERS
+// SEARCH ACTIONS
 // ===============================
 
 const healthInput = document.getElementById("health");
@@ -83,10 +110,6 @@ searchInput.addEventListener("input", (e) => {
   currentSearch = e.target.value.toLowerCase();
   renderCurrentPile();
 });
-
-// ===============================
-// CLEARING AND SAVING FAVORITES
-// ===============================
 
 const saveFavoritesBtn = document.getElementById("save-favorites");
 const clearFavoritesBtn = document.getElementById("clear-favorites");
@@ -110,6 +133,11 @@ clearFavoritesBtn.addEventListener("click", () => {
   renderCurrentPile();
 });
 
+document.getElementById("logout").addEventListener("click", () => {
+  localStorage.clear();
+  window.location.href = "/login.html";
+});
+
 // ===============================
 // FLIP DECK BUTTON
 // ===============================
@@ -124,7 +152,7 @@ document.getElementById("open-flip-deck").addEventListener("click", () => {
 // ===============================
 
 async function loadCards() {
-  const response = await fetch(`/cards?character=${currentCharacter}`);
+  const response = await fetch(`/cards?character=${currentCharacter}`, { headers: authHeaders() });
   const data = await response.json();
 
   cards = data.map((cardObj, index) => ({
@@ -136,6 +164,7 @@ async function loadCards() {
   }));
 
   piles.library = [...cards];
+  postActivity("character_loaded", { character: currentCharacter }); // log event for analytics
   renderCurrentPile();
 }
 
@@ -241,6 +270,19 @@ function moveSingleCard(cardId, toPile) {
   const [card] = fromPileCards.splice(index, 1);
   piles[toPile].push(card);
 
+  postActivity("card_moved", { // log event for analytics
+    count: 1,
+    card_name: card.name,
+    from_pile: currentPile,
+    to_pile: toPile,
+    pile_sizes: {
+      library: piles.library.length,
+      hand: piles.hand.length,
+      discard: piles.discard.length,
+      exhaust: piles.exhaust.length
+    }
+  });
+
   clearSelection();
   renderCurrentPile();
 }
@@ -260,6 +302,18 @@ function moveSelectedCards(toPile) {
   );
 
   piles[toPile].push(...movingCards);
+
+  postActivity("card_moved", { // log event for analytics
+    count: movingCards.length,
+    from_pile: currentPile,
+    to_pile: toPile,
+    pile_sizes: {
+      library: piles.library.length,
+      hand: piles.hand.length,
+      discard: piles.discard.length,
+      exhaust: piles.exhaust.length
+    }
+  });
 
   clearSelection();
   renderCurrentPile();

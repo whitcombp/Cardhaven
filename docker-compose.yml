@@ -1,0 +1,84 @@
+services:
+
+  # ===============================
+  # DATABASES
+  # ===============================
+
+  auth-db:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: auth_user
+      POSTGRES_PASSWORD: auth_pass
+      POSTGRES_DB: auth_db
+    volumes:
+      - auth-db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U auth_user -d auth_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  stats-db:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: stats_user
+      POSTGRES_PASSWORD: stats_pass
+      POSTGRES_DB: stats_db
+    volumes:
+      - stats-db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U stats_user -d stats_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # ===============================
+  # SERVICES
+  # ===============================
+
+  auth-service:
+    build: ./services/auth-service
+    ports:
+      - "5001:5001"
+    environment:
+      DATABASE_URL: postgresql://auth_user:auth_pass@auth-db:5432/auth_db
+      JWT_SECRET: change-this-secret-in-production
+      STATS_SERVICE_URL: http://stats-service:5002
+      AUTH_SERVICE_URL: http://auth-service:5001
+    depends_on:
+      auth-db:
+        condition: service_healthy
+
+  stats-service:
+    build: ./services/stats-service
+    ports:
+      - "5002:5002"
+    environment:
+      DATABASE_URL: postgresql://stats_user:stats_pass@stats-db:5432/stats_db
+      JWT_SECRET: change-this-secret-in-production
+      ADMIN_SECRET: change-this-admin-secret-in-production
+    depends_on:
+      stats-db:
+        condition: service_healthy
+
+  card-service:
+    build: ./services/card-service
+    ports:
+      - "5000:5000"
+    environment:
+      JWT_SECRET: change-this-secret-in-production
+      STATS_SERVICE_URL: http://stats-service:5002
+    volumes:
+      - ./frontend:/app/frontend
+      - ./images:/app/images
+    depends_on:
+      - auth-service
+      - stats-service
+
+# ===============================
+# VOLUMES
+# ===============================
+
+volumes:
+  auth-db-data:
+  stats-db-data:

@@ -22,6 +22,31 @@ const curseButton = document.getElementById("curse-button");
 const drawnStack = document.getElementById("drawn-container");
 
 // ===============================
+// AUTH
+// ===============================
+
+const token = localStorage.getItem("token");
+
+if (!token) {
+  window.location.href = "/login.html";
+}
+
+function authHeaders() {
+  return {
+    "Content-Type": "application/json",
+    "Authorization": `Bearer ${token}`
+  };
+}
+
+function postActivity(event_type, payload) {
+  fetch("/activity", {
+    method: "POST",
+    headers: authHeaders(),
+    body: JSON.stringify({ event_type, payload })
+  }).catch(() => {});
+}
+
+// ===============================
 // LOAD DECK DATA
 // ===============================
 
@@ -29,7 +54,7 @@ async function loadDeck() {
   const params = new URLSearchParams(window.location.search);
   const character = params.get("character") || "plagueherald";
 
-  const response = await fetch(`/flips?character=${character}`);
+  const response = await fetch(`/flips?character=${character}`, { headers: authHeaders() });
   const data = await response.json();
 
   deck = data.map((card, index) => ({
@@ -55,6 +80,11 @@ function reshuffleDeck() {
 
   actualDrawPile = [];
   displayDrawPile = [];
+
+  postActivity("deck_reshuffled", { // log event for analytics
+    deck_size: deck.length
+  });
+
   renderDeck();
   renderDrawnPile();
 }
@@ -75,6 +105,12 @@ function drawCard() {
     displayDrawPile.push(drawn);
     actualDrawPile.push(drawn);
   }
+
+  postActivity("deck_flipped", { // log event for analytics
+    card: drawn.card,
+    reshuffle_triggered: drawn.reshuffle,
+    deck_size: deck.length
+  });
 
   // render with updated deck status
   renderDeck();
