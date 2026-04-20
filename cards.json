@@ -1,163 +1,175 @@
 [
     {
-        "filename": "images\\spellweaver\\ability_cards\\1\\aid-from-the-ether.jpeg",
-        "name": "aid from the ether1",
+        "filename": "images\\plagueherald\\ability_cards\\1\\accelerated-end.jpeg",
+        "name": "accelerated end1",
         "level": "1",
         "favorite": false
     },
     {
-        "filename": "images\\spellweaver\\ability_cards\\1\\arcane-bolt.jpeg",
-        "name": "arcane bolt1",
+        "filename": "images\\plagueherald\\ability_cards\\1\\biting-gnats.jpeg",
+        "name": "biting gnats1",
         "level": "1",
         "favorite": false
     },
     {
-        "filename": "images\\spellweaver\\ability_cards\\1\\emberfrost.jpeg",
-        "name": "emberfrost1",
+        "filename": "images\\plagueherald\\ability_cards\\1\\blistering-buboes.jpeg",
+        "name": "blistering buboes1",
         "level": "1",
         "favorite": false
     },
     {
-        "filename": "images\\spellweaver\\ability_cards\\1\\fire-orbs.jpeg",
-        "name": "fire orbs1",
+        "filename": "images\\plagueherald\\ability_cards\\1\\comorbid-sting.jpeg",
+        "name": "comorbid sting1",
         "level": "1",
         "favorite": false
     },
     {
-        "filename": "images\\spellweaver\\ability_cards\\1\\flame-strike.jpeg",
-        "name": "flame strike1",
+        "filename": "images\\plagueherald\\ability_cards\\1\\contagious-corpse.jpeg",
+        "name": "contagious corpse1",
         "level": "1",
         "favorite": false
     },
     {
-        "filename": "images\\spellweaver\\ability_cards\\1\\frost-strike.jpeg",
-        "name": "frost strike1",
+        "filename": "images\\plagueherald\\ability_cards\\1\\festering-sores.jpeg",
+        "name": "festering sores1",
         "level": "1",
         "favorite": false
     },
     {
-        "filename": "images\\spellweaver\\ability_cards\\1\\icy-blast.jpeg",
-        "name": "icy blast1",
+        "filename": "images\\plagueherald\\ability_cards\\1\\path-of-the-pox.jpeg",
+        "name": "path of the pox1",
         "level": "1",
         "favorite": false
     },
     {
-        "filename": "images\\spellweaver\\ability_cards\\1\\reviving-ether.jpeg",
-        "name": "reviving ether1",
+        "filename": "images\\plagueherald\\ability_cards\\1\\vile-pestilence.jpeg",
+        "name": "vile pestilence1",
         "level": "1",
         "favorite": false
     },
     {
-        "filename": "images\\spellweaver\\ability_cards\\1.5\\flameswell.jpeg",
-        "name": "flameswell1.5",
+        "filename": "images\\plagueherald\\ability_cards\\1\\virulent-strain.jpeg",
+        "name": "virulent strain1",
+        "level": "1",
+        "favorite": false
+    },
+    {
+        "filename": "images\\plagueherald\\ability_cards\\1\\wretched-yield.jpeg",
+        "name": "wretched yield1",
+        "level": "1",
+        "favorite": false
+    },
+    {
+        "filename": "images\\plagueherald\\ability_cards\\1.5\\deliriums-danse.jpeg",
+        "name": "deliriums danse1.5",
         "level": "1.5",
         "favorite": false
     },
     {
-        "filename": "images\\spellweaver\\ability_cards\\1.5\\ice-armor.jpeg",
-        "name": "ice armor1.5",
+        "filename": "images\\plagueherald\\ability_cards\\1.5\\gift-of-rot.jpeg",
+        "name": "gift of rot1.5",
         "level": "1.5",
         "favorite": false
     },
     {
-        "filename": "images\\spellweaver\\ability_cards\\1.5\\impaling-eruption.jpeg",
-        "name": "impaling eruption1.5",
+        "filename": "images\\plagueherald\\ability_cards\\1.5\\spread-the-plague.jpeg",
+        "name": "spread the plague1.5",
         "level": "1.5",
         "favorite": false
     },
     {
-        "filename": "images\\spellweaver\\ability_cards\\2\\etheric-echo.jpeg",
-        "name": "etheric echo2",
+        "filename": "images\\plagueherald\\ability_cards\\2\\rot-maggots.jpeg",
+        "name": "rot maggots2",
         "level": "2",
         "favorite": false
     },
     {
-        "filename": "images\\spellweaver\\ability_cards\\2\\freezing-nova.jpeg",
-        "name": "freezing nova2",
+        "filename": "images\\plagueherald\\ability_cards\\2\\sickening-strength.jpeg",
+        "name": "sickening strength2",
         "level": "2",
         "favorite": false
     },
     {
-        "filename": "images\\spellweaver\\ability_cards\\3\\artic-shards.jpeg",
-        "name": "artic shards3",
+        "filename": "images\\plagueherald\\ability_cards\\3\\cloying-miasma.jpeg",
+        "name": "cloying miasma3",
         "level": "3",
         "favorite": false
     },
     {
-        "filename": "images\\spellweaver\\ability_cards\\3\\heatwave.jpeg",
-        "name": "heatwave3",
+        "filename": "images\\plagueherald\\ability_cards\\3\\nightmarish-affliction.jpeg",
+        "name": "nightmarish affliction3",
         "level": "3",
         "favorite": false
     },
     {
-        "filename": "images\\spellweaver\\ability_cards\\4\\cold-fire.jpeg",
-        "name": "cold fire4",
+        "filename": "images\\plagueherald\\ability_cards\\4\\rabid-bite.jpeg",
+        "name": "rabid bite4",
         "level": "4",
         "favorite": false
     },
     {
-        "filename": "images\\spellweaver\\ability_cards\\4\\dancing-gales.jpeg",
-        "name": "dancing gales4",
+        "filename": "images\\plagueherald\\ability_cards\\4\\unwilling-sacrifice.jpeg",
+        "name": "unwilling sacrifice4",
         "level": "4",
         "favorite": false
     },
     {
-        "filename": "images\\spellweaver\\ability_cards\\5\\cool-down.jpeg",
-        "name": "cool down5",
+        "filename": "images\\plagueherald\\ability_cards\\5\\compounding-infection.jpeg",
+        "name": "compounding infection5",
         "level": "5",
         "favorite": false
     },
     {
-        "filename": "images\\spellweaver\\ability_cards\\5\\warm-up.jpeg",
-        "name": "warm up5",
+        "filename": "images\\plagueherald\\ability_cards\\5\\wilt-and-wither.jpeg",
+        "name": "wilt and wither5",
         "level": "5",
         "favorite": false
     },
     {
-        "filename": "images\\spellweaver\\ability_cards\\6\\elemental-rays.jpeg",
-        "name": "elemental rays6",
+        "filename": "images\\plagueherald\\ability_cards\\6\\crippling-malady.jpeg",
+        "name": "crippling malady6",
         "level": "6",
         "favorite": false
     },
     {
-        "filename": "images\\spellweaver\\ability_cards\\6\\searing-glacier.jpeg",
-        "name": "searing glacier6",
+        "filename": "images\\plagueherald\\ability_cards\\6\\succumb-to-the-gift.jpeg",
+        "name": "succumb to the gift6",
         "level": "6",
         "favorite": false
     },
     {
-        "filename": "images\\spellweaver\\ability_cards\\7\\chromatic-explosion.jpeg",
-        "name": "chromatic explosion7",
+        "filename": "images\\plagueherald\\ability_cards\\7\\mass-extinction.jpeg",
+        "name": "mass extinction7",
         "level": "7",
         "favorite": false
     },
     {
-        "filename": "images\\spellweaver\\ability_cards\\7\\spell-mastery.jpeg",
-        "name": "spell mastery7",
+        "filename": "images\\plagueherald\\ability_cards\\7\\tainted-offering.jpeg",
+        "name": "tainted offering7",
         "level": "7",
         "favorite": false
     },
     {
-        "filename": "images\\spellweaver\\ability_cards\\8\\frostflare-orbs.jpeg",
-        "name": "frostflare orbs8",
+        "filename": "images\\plagueherald\\ability_cards\\8\\convert-the-flock.jpeg",
+        "name": "convert the flock8",
         "level": "8",
         "favorite": false
     },
     {
-        "filename": "images\\spellweaver\\ability_cards\\8\\twin-beams.jpeg",
-        "name": "twin beams8",
+        "filename": "images\\plagueherald\\ability_cards\\8\\creeping-lethargy.jpeg",
+        "name": "creeping lethargy8",
         "level": "8",
         "favorite": false
     },
     {
-        "filename": "images\\spellweaver\\ability_cards\\9\\freezing-vortex.jpeg",
-        "name": "freezing vortex9",
+        "filename": "images\\plagueherald\\ability_cards\\9\\disease-vector.jpeg",
+        "name": "disease vector9",
         "level": "9",
         "favorite": false
     },
     {
-        "filename": "images\\spellweaver\\ability_cards\\9\\inferno.jpeg",
-        "name": "inferno9",
+        "filename": "images\\plagueherald\\ability_cards\\9\\xorns-embrace.jpeg",
+        "name": "xorns embrace9",
         "level": "9",
         "favorite": false
     }

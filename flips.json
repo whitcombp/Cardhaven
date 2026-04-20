@@ -1,82 +1,82 @@
 [
     {
-        "card": "images\\spellweaver\\attack_modifiers\\+0_0.png",
+        "card": "images\\plagueherald\\attack_modifiers\\+0_0.png",
         "reshuffle": false
     },
     {
-        "card": "images\\spellweaver\\attack_modifiers\\+0_1.png",
+        "card": "images\\plagueherald\\attack_modifiers\\+0_1.png",
         "reshuffle": false
     },
     {
-        "card": "images\\spellweaver\\attack_modifiers\\+0_2.png",
+        "card": "images\\plagueherald\\attack_modifiers\\+0_2.png",
         "reshuffle": false
     },
     {
-        "card": "images\\spellweaver\\attack_modifiers\\+0_3.png",
+        "card": "images\\plagueherald\\attack_modifiers\\+0_3.png",
         "reshuffle": false
     },
     {
-        "card": "images\\spellweaver\\attack_modifiers\\+0_4.png",
+        "card": "images\\plagueherald\\attack_modifiers\\+0_4.png",
         "reshuffle": false
     },
     {
-        "card": "images\\spellweaver\\attack_modifiers\\+0_5.png",
+        "card": "images\\plagueherald\\attack_modifiers\\+0_5.png",
         "reshuffle": false
     },
     {
-        "card": "images\\spellweaver\\attack_modifiers\\+0_6_from_-2_removal.png",
+        "card": "images\\plagueherald\\attack_modifiers\\+0_give_plague_0.png",
         "reshuffle": false
     },
     {
-        "card": "images\\spellweaver\\attack_modifiers\\+0_any_elem_0.png",
+        "card": "images\\plagueherald\\attack_modifiers\\+0_give_plague_1.png",
         "reshuffle": false
     },
     {
-        "card": "images\\spellweaver\\attack_modifiers\\+0_any_elem_1.png",
+        "card": "images\\plagueherald\\attack_modifiers\\+1_0.png",
         "reshuffle": false
     },
     {
-        "card": "images\\spellweaver\\attack_modifiers\\+0_any_elem_2.png",
+        "card": "images\\plagueherald\\attack_modifiers\\+1_1.png",
         "reshuffle": false
     },
     {
-        "card": "images\\spellweaver\\attack_modifiers\\+1_0.png",
+        "card": "images\\plagueherald\\attack_modifiers\\+1_2.png",
         "reshuffle": false
     },
     {
-        "card": "images\\spellweaver\\attack_modifiers\\+1_1.png",
+        "card": "images\\plagueherald\\attack_modifiers\\+1_3.png",
         "reshuffle": false
     },
     {
-        "card": "images\\spellweaver\\attack_modifiers\\+1_2.png",
+        "card": "images\\plagueherald\\attack_modifiers\\+1_4.png",
         "reshuffle": false
     },
     {
-        "card": "images\\spellweaver\\attack_modifiers\\+1_3.png",
+        "card": "images\\plagueherald\\attack_modifiers\\+2.png",
         "reshuffle": false
     },
     {
-        "card": "images\\spellweaver\\attack_modifiers\\+1_4.png",
+        "card": "images\\plagueherald\\attack_modifiers\\-1 _1.png",
         "reshuffle": false
     },
     {
-        "card": "images\\spellweaver\\attack_modifiers\\+2.png",
+        "card": "images\\plagueherald\\attack_modifiers\\-1_0.png",
         "reshuffle": false
     },
     {
-        "card": "images\\spellweaver\\attack_modifiers\\-1 _1.png",
+        "card": "images\\plagueherald\\attack_modifiers\\-1_2.png",
         "reshuffle": false
     },
     {
-        "card": "images\\spellweaver\\attack_modifiers\\-1_0.png",
+        "card": "images\\plagueherald\\attack_modifiers\\-2.png",
         "reshuffle": false
     },
     {
-        "card": "images\\spellweaver\\attack_modifiers\\x0.png",
+        "card": "images\\plagueherald\\attack_modifiers\\x0.png",
         "reshuffle": true
     },
     {
-        "card": "images\\spellweaver\\attack_modifiers\\x2.png",
+        "card": "images\\plagueherald\\attack_modifiers\\x2.png",
         "reshuffle": true
     }
 ]

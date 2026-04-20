@@ -1,7 +1,7 @@
 import os
 import json
 
-character = "spellweaver"
+character = "plagueherald"
 
 cards_json = []
 
