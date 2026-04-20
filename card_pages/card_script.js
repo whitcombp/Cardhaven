@@ -5,6 +5,8 @@
 
 let cards = [];
 
+let currentCharacter = "plagueherald";
+
 const piles = {
   library: [],
   hand: [],
@@ -22,6 +24,42 @@ let draggedCardId = null;
 
 const pileContainer = document.getElementById("pile-container");
 const pileButtons = document.querySelectorAll(".pile-btn");
+
+// ===============================
+// CHARACTER SELECTOR
+// ===============================
+
+const characterSelect = document.getElementById("character-select");
+const loadCharacterBtn = document.getElementById("load-character");
+
+async function loadCharacters() {
+  const response = await fetch("/characters");
+  const characters = await response.json();
+
+  characters.forEach(char => {
+    const opt = document.createElement("option");
+    opt.value = char;
+    opt.textContent = char.charAt(0).toUpperCase() + char.slice(1);
+    characterSelect.appendChild(opt);
+  });
+
+  // Set selector to match default character
+  characterSelect.value = currentCharacter;
+}
+
+loadCharacterBtn.addEventListener("click", () => {
+  currentCharacter = characterSelect.value;
+
+  // Reset all piles and state
+  piles.library = [];
+  piles.hand = [];
+  piles.discard = [];
+  piles.exhaust = [];
+  selectedCardIds.clear();
+  currentPile = "library";
+
+  loadCards();
+});
 
 // ===============================
 // SEARCH AND HEALTH / XP TRACKERS
@@ -72,13 +110,21 @@ clearFavoritesBtn.addEventListener("click", () => {
   renderCurrentPile();
 });
 
+// ===============================
+// FLIP DECK BUTTON
+// ===============================
+
+document.getElementById("open-flip-deck").addEventListener("click", () => {
+  window.open(`/flip_deck?character=${currentCharacter}`, "_blank");
+});
+
 
 // ===============================
 // LOAD CARD DATA
 // ===============================
 
 async function loadCards() {
-  const response = await fetch("cards.json");
+  const response = await fetch(`/cards?character=${currentCharacter}`);
   const data = await response.json();
 
   cards = data.map((cardObj, index) => ({
@@ -274,4 +320,4 @@ function updatePileButtons() {
 // INIT
 // ===============================
 
-loadCards();
+loadCharacters().then(() => loadCards());

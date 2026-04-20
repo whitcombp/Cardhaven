@@ -65,7 +65,7 @@ body {
 /* Search actions (favorites buttons) */
 .search-actions {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   gap: 8px;
 }
 
@@ -101,6 +101,48 @@ body {
 
   background: #121212;
   box-shadow: 0 6px 12px rgba(0,0,0,0.6);
+}
+
+/* Character Selector */
+.character-selector {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+#character-select {
+  padding: 10px 14px;
+  border-radius: 8px;
+  border: 1px solid #444;
+  background: #1f1f1f;
+  color: #fff;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+#character-select:focus {
+  outline: none;
+  border-color: #ff6f61;
+  box-shadow: 0 0 6px #ff6f61aa;
+}
+
+#load-character {
+  padding: 10px 16px;
+  border: none;
+  border-radius: 8px;
+  background: #ff6f61;
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, box-shadow 0.2s;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+  white-space: nowrap;
+}
+
+#load-character:hover {
+  background: #e05a50;
+  box-shadow: 0 4px 10px rgba(255,111,97,0.6);
 }
 
 /* Piles */

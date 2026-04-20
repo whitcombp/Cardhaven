@@ -12,7 +12,7 @@ if os.path.exists("favorites.txt"):
         [favorites.add(f.strip().lower()) for f in file]
 print("favorites:", favorites)
 
-path = os.path.join("images", character, "ability_cards")
+path = os.path.join("images", "character_images", character, "ability_cards")
 dir_walk = os.walk(path)  # dirpath (str), dirnames (list), filenames (list)
 levels = next(dir_walk)[1]
 for dir, level in zip(dir_walk, levels):

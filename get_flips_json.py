@@ -6,7 +6,9 @@ character = "plagueherald"
 flips_json = []
 
 # Read in the modifiers for selected character
-modifiers_path = os.path.join("images", character, "attack_modifiers")
+modifiers_path = os.path.join(
+    "images", "character_images", character, "attack_modifiers"
+)
 modifiers = [os.path.join(modifiers_path, m) for m in os.listdir(modifiers_path)]
 
 # Update for if the modifier needs a reshuffle (natural whiff or double damage)

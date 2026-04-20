@@ -7,8 +7,8 @@ let displayDrawPile = []; // will show curse and bless cards, no removal
 let actualDrawPile = []; // curse and bless cards will be removed from here
 
 // Bless / Curse cards (example paths)
-const BLESS_CARD = { card: "images\\ExtraModifiers\\bless.png", reshuffle: false };
-const CURSE_CARD = { card: "images\\ExtraModifiers\\curse.png", reshuffle: false };
+const BLESS_CARD = { card: "images/other/ExtraModifiers/bless.png", reshuffle: false };
+const CURSE_CARD = { card: "images/other/ExtraModifiers/curse.png", reshuffle: false };
 
 // ===============================
 // DOM REFERENCES
@@ -26,7 +26,10 @@ const drawnStack = document.getElementById("drawn-container");
 // ===============================
 
 async function loadDeck() {
-  const response = await fetch("../flips.json");
+  const params = new URLSearchParams(window.location.search);
+  const character = params.get("character") || "plagueherald";
+
+  const response = await fetch(`/flips?character=${character}`);
   const data = await response.json();
 
   deck = data.map((card, index) => ({
