@@ -1,0 +1,6 @@
+.venv
+__pycache__
+*.pyc
+*.pyo
+cards.json
+flips.json
