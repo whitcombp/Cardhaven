@@ -36,10 +36,31 @@ services:
   # SERVICES
   # ===============================
 
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.5.0
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+
+  kafka:
+    image: confluentinc/cp-kafka:7.5.0
+    depends_on:
+      - zookeeper
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+    healthcheck:
+      test: ["CMD", "bash", "-c", "nc -z localhost 9092"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
   auth-service:
     build: ./services/auth-service
-    ports:
-      - "5001:5001"
     environment:
       DATABASE_URL: postgresql://auth_user:auth_pass@auth-db:5432/auth_db
       JWT_SECRET: change-this-secret-in-production
@@ -51,8 +72,6 @@ services:
 
   stats-service:
     build: ./services/stats-service
-    ports:
-      - "5002:5002"
     environment:
       DATABASE_URL: postgresql://stats_user:stats_pass@stats-db:5432/stats_db
       JWT_SECRET: change-this-secret-in-production
@@ -64,16 +83,28 @@ services:
   card-service:
     build: ./services/card-service
     ports:
-      - "5000:5000"
+      - "80:5000" # Expose card-service on port 80 for frontend access
     environment:
       JWT_SECRET: change-this-secret-in-production
       STATS_SERVICE_URL: http://stats-service:5002
+      LOBBY_SERVICE_URL: http://lobby-service:5003
     volumes:
       - ./frontend:/app/frontend
       - ./images:/app/images
     depends_on:
       - auth-service
       - stats-service
+
+  lobby-service:
+    build: ./services/lobby-service
+    ports:
+      - "5003:5003" # Expose lobby-service on port 5003 for frontend access
+    environment:
+      JWT_SECRET: change-this-secret-in-production
+      KAFKA_BROKER: kafka:9092
+    depends_on:
+      kafka:
+        condition: service_healthy
 
 # ===============================
 # VOLUMES

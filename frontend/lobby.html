@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Cardhaven — Lobby</title>
+  <link rel="stylesheet" href="card_pages/card_styles.css" />
+  <link rel="stylesheet" href="card_pages/lobby_styles.css" />
+  <script src="card_pages/lobby_script.js" defer></script>
+</head>
+<body>
+
+<div class="app">
+
+  <header class="header">
+    <h1 class="title">Cardhaven</h1>
+    <div class="search-actions">
+      <button id="logout">Logout</button>
+    </div>
+  </header>
+
+  <!-- Room setup panel (shown before joining) -->
+  <div id="room-setup">
+    <div class="setup-card">
+      <h2>Game Lobby</h2>
+      <p class="setup-hint">Create a new room or join an existing one.</p>
+
+      <div class="setup-row">
+        <button id="create-room-btn" class="btn-primary">Create Room</button>
+      </div>
+
+      <div class="setup-divider">or</div>
+
+      <div class="setup-row">
+        <input type="text" id="join-room-input" placeholder="Enter room code..." maxlength="8" />
+        <button id="join-room-btn" class="btn-secondary">Join</button>
+      </div>
+
+      <p id="setup-error" class="setup-error"></p>
+    </div>
+  </div>
+
+  <!-- Active lobby (shown after joining) -->
+  <div id="room-lobby" class="hidden">
+
+    <div class="lobby-top">
+      <div class="room-info">
+        <span class="room-label">Room</span>
+        <span id="room-code" class="room-code"></span>
+        <button id="copy-room-btn" class="btn-ghost" title="Copy room code">⎘</button>
+      </div>
+      <button id="open-card-page-btn" class="btn-primary">Open Card Page ↗</button>
+    </div>
+
+    <div class="lobby-body">
+
+      <!-- Players panel -->
+      <div class="players-panel">
+        <h3 class="panel-title">Players</h3>
+        <ul id="players-list"></ul>
+      </div>
+
+      <!-- Play feed -->
+      <div class="feed-panel">
+        <div class="feed-header">
+          <h3 class="panel-title">Play Feed</h3>
+          <button id="clear-feed-btn" class="btn-ghost">Clear</button>
+        </div>
+        <div id="play-feed"></div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>

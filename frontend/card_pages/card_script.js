@@ -1,4 +1,3 @@
-// TO RUN: python -m http.server
 // ===============================
 // GLOBAL STATE
 // ===============================
@@ -17,6 +16,14 @@ const piles = {
 let currentPile = "library";
 let selectedCardIds = new Set();
 let draggedCardId = null;
+
+// ===============================
+// LOBBY STATE
+// ===============================
+
+const lobbyRoomId = new URLSearchParams(window.location.search).get("room");
+let lobbyWs = null;
+let myLobbyColor = null;
 
 // ===============================
 // DOM REFERENCES
@@ -70,14 +77,12 @@ async function loadCharacters() {
     characterSelect.appendChild(opt);
   });
 
-  // Set selector to match default character
   characterSelect.value = currentCharacter;
 }
 
 loadCharacterBtn.addEventListener("click", () => {
   currentCharacter = characterSelect.value;
 
-  // Reset all piles and state
   piles.library = [];
   piles.hand = [];
   piles.discard = [];
@@ -119,8 +124,8 @@ saveFavoritesBtn.addEventListener("click", () => {
   if (favoriteCards.length === 0) return;
 
   const favoriteNames = favoriteCards
-  .map(card => card.name.replace(/\s*\d+(\.\d+)?$/, ''))
-  .join("\n");
+    .map(card => card.name.replace(/\s*\d+(\.\d+)?$/, ''))
+    .join("\n");
 
   const blob = new Blob([favoriteNames], { type: "text/plain" });
   const url = URL.createObjectURL(blob);
@@ -146,7 +151,6 @@ document.getElementById("open-flip-deck").addEventListener("click", () => {
   window.open(`/flip_deck?character=${currentCharacter}`, "_blank");
 });
 
-
 // ===============================
 // LOAD CARD DATA
 // ===============================
@@ -164,7 +168,7 @@ async function loadCards() {
   }));
 
   piles.library = [...cards];
-  postActivity("character_loaded", { character: currentCharacter }); // log event for analytics
+  postActivity("character_loaded", { character: currentCharacter });
   renderCurrentPile();
 }
 
@@ -177,7 +181,7 @@ function renderCurrentPile() {
 
   piles[currentPile]
     .filter(card => card.name.toLowerCase().includes(currentSearch))
-    .sort((a, b) => a.level - b.level || a.name.toLowerCase().localeCompare(b.name.toLowerCase())) // sorts alphabetically if level is the same
+    .sort((a, b) => a.level - b.level || a.name.toLowerCase().localeCompare(b.name.toLowerCase()))
     .forEach(card => {
       const cardEl = document.createElement("div");
       cardEl.className = "image-card";
@@ -222,6 +226,7 @@ function renderCurrentPile() {
     });
 
   updatePileButtons();
+  updatePlayButton();
 }
 
 // ===============================
@@ -270,7 +275,7 @@ function moveSingleCard(cardId, toPile) {
   const [card] = fromPileCards.splice(index, 1);
   piles[toPile].push(card);
 
-  postActivity("card_moved", { // log event for analytics
+  postActivity("card_moved", {
     count: 1,
     card_name: card.name,
     from_pile: currentPile,
@@ -303,7 +308,7 @@ function moveSelectedCards(toPile) {
 
   piles[toPile].push(...movingCards);
 
-  postActivity("card_moved", { // log event for analytics
+  postActivity("card_moved", {
     count: movingCards.length,
     from_pile: currentPile,
     to_pile: toPile,
@@ -368,6 +373,75 @@ function updatePileButtons() {
     const countSpan = btn.querySelector(".pile-count");
     countSpan.textContent = `(${piles[pileName].length})`;
   });
+}
+
+// ===============================
+// LOBBY — PLAY TO FEED
+// ===============================
+
+const playBtn = document.getElementById("play-to-lobby-btn");
+
+// Only show and connect if this tab was opened from the lobby with ?room=
+if (lobbyRoomId) {
+  playBtn.classList.remove("hidden");
+  initLobbyConnection(lobbyRoomId);
+}
+
+function initLobbyConnection(roomId) {
+  const wsProtocol = location.protocol === "https:" ? "wss" : "ws";
+  const wsUrl = `${wsProtocol}://${location.hostname}:5003/lobby/${roomId}/ws`;
+
+  lobbyWs = new WebSocket(wsUrl);
+
+  lobbyWs.addEventListener("open", () => {
+    lobbyWs.send(JSON.stringify({ token }));
+  });
+
+  lobbyWs.addEventListener("message", (e) => {
+    let event;
+    try { event = JSON.parse(e.data); } catch { return; }
+
+    if (event.type === "joined" && event.color) {
+      myLobbyColor = event.color;
+      // Tint the play button with the player's assigned color
+      playBtn.style.boxShadow = `0 0 8px ${myLobbyColor}88`;
+      playBtn.style.borderColor = myLobbyColor;
+    }
+  });
+
+  lobbyWs.addEventListener("close", () => {
+    playBtn.disabled = true;
+    playBtn.textContent = "Disconnected";
+  });
+}
+
+playBtn.addEventListener("click", playSelectedToLobby);
+
+function playSelectedToLobby() {
+  if (!lobbyWs || lobbyWs.readyState !== WebSocket.OPEN) return;
+  if (selectedCardIds.size === 0) return;
+
+  const selectedCards = piles[currentPile]
+    .filter(card => selectedCardIds.has(card.id))
+    .map(card => ({ id: card.id, name: card.name, image: card.image }));
+
+  lobbyWs.send(JSON.stringify({
+    action: "cards_played",
+    card_id: null,
+    payload: {
+      cards: selectedCards,
+      from_pile: currentPile,
+    },
+  }));
+
+  playBtn.textContent = "Sent ✓";
+  setTimeout(() => { playBtn.textContent = "Play Selected ▶"; }, 1200);
+}
+
+function updatePlayButton() {
+  if (!lobbyRoomId) return; // not in a lobby session
+  const connected = lobbyWs && lobbyWs.readyState === WebSocket.OPEN;
+  playBtn.disabled = selectedCardIds.size === 0 || !connected;
 }
 
 // ===============================

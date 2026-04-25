@@ -9,6 +9,7 @@ app = Flask(__name__)
 
 STATS_SERVICE_URL = os.environ.get("STATS_SERVICE_URL", "http://stats-service:5002")
 AUTH_SERVICE_URL = os.environ.get("AUTH_SERVICE_URL", "http://auth-service:5001")
+LOBBY_SERVICE_URL = os.environ.get("LOBBY_SERVICE_URL", "http://lobby-service:5003")
 FRONTEND = "/app/frontend"
 IMAGES = "/app/images"
 
@@ -69,7 +70,12 @@ def start_timer():
 
 @app.route("/")
 def index():
-    return send_from_directory(FRONTEND, "index.html")
+    return send_from_directory(FRONTEND, "lobby.html")
+
+
+@app.route("/lobby.html")
+def lobby_page():
+    return send_from_directory(FRONTEND, "lobby.html")
 
 
 @app.route("/login.html")
@@ -95,6 +101,21 @@ def flip_deck_static(filename):
 @app.route("/images/<path:filename>")
 def images(filename):
     return send_from_directory(IMAGES, filename)
+
+
+# ===============================
+# PROXY ROUTES
+# ===============================
+
+
+@app.route("/lobby/create", methods=["POST"])
+def lobby_create():
+    res = requests.post(
+        f"{LOBBY_SERVICE_URL}/lobby/create",
+        json=request.get_json(),
+        headers={"Authorization": request.headers.get("Authorization", "")},
+    )
+    return jsonify(res.json()), res.status_code
 
 
 # ===============================
@@ -153,7 +174,7 @@ def cards():
                 {
                     "filename": os.path.join(dir[0], filename)
                     .replace("\\", "/")
-                    .replace("/app/images/", "images/"),
+                    .replace("/app/images/", "/images/"),
                     "name": name + level,
                     "level": level,
                     "favorite": name in favorites,
@@ -178,7 +199,7 @@ def flips():
     modifiers = [
         os.path.join(modifiers_path, m)
         .replace("\\", "/")
-        .replace("/app/images/", "images/")
+        .replace("/app/images/", "/images/")
         for m in os.listdir(modifiers_path)
     ]
     flips_json = [{"card": m, "reshuffle": "x2" in m or "x0" in m} for m in modifiers]
