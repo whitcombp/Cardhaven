@@ -78,6 +78,11 @@ def lobby_page():
     return send_from_directory(FRONTEND, "lobby.html")
 
 
+@app.route("/index.html")
+def card_page():
+    return send_from_directory(FRONTEND, "index.html")
+
+
 @app.route("/login.html")
 def login_page():
     return send_from_directory(FRONTEND, "login.html")

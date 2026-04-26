@@ -2,3 +2,4 @@ flask
 flask-sock
 kafka-python
 PyJWT
+flask-cors

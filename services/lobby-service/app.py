@@ -1,4 +1,7 @@
+import sys
+
 from flask import Flask, request, jsonify, send_from_directory
+from flask_cors import CORS
 from flask_sock import Sock
 import jwt, os, json, threading, uuid
 from datetime import timezone, datetime
@@ -6,6 +9,7 @@ from kafka import KafkaProducer, KafkaConsumer
 import uuid
 
 app = Flask(__name__)
+CORS(app, origins=["http://localhost", "http://localhost:80"])
 sock = Sock(app)
 
 JWT_SECRET = os.environ.get("JWT_SECRET", "dev-secret-change-in-production")
@@ -230,6 +234,7 @@ def lobby_ws(ws, room_id):
                 "room_id": room_id,
                 "user_id": user["user_id"],
                 "username": uname,
+                "conn_id": conn_id,
                 "color": color,
                 "type": data.get("action", "cards_played"),
                 "action": data.get("action"),
@@ -268,7 +273,8 @@ def kafka_consumer_thread():
     for message in consumer:
         event = message.value
         room_id = event.get("room_id", "").upper()
-        sender = event.get("username")
+        sender_conn_id = event.get("conn_id")
+
         if not room_id:
             continue
 
@@ -277,8 +283,8 @@ def kafka_consumer_thread():
 
         dead = []
         for conn_id, (uname, ws) in conns:
-            # Don't sender already knows what they played
-            if uname == sender:
+            # Don't send to since they already know what they played
+            if conn_id == sender_conn_id:
                 continue
             try:
                 ws.send(json.dumps(event))
