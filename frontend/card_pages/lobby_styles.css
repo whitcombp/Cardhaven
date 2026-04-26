@@ -26,7 +26,6 @@
 .setup-card h2 {
   font-size: 1.6rem;
   font-weight: 700;
-  color: #fff;
 }
 
 .setup-hint {
@@ -150,9 +149,10 @@
 #room-lobby {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 16px;
 }
 
+/* Top bar */
 .lobby-top {
   display: flex;
   align-items: center;
@@ -185,16 +185,27 @@
   font-family: 'Courier New', monospace;
 }
 
-/* Lobby body: players left, feed right */
-.lobby-body {
-  display: grid;
-  grid-template-columns: 220px 1fr;
-  gap: 20px;
-  align-items: start;
+/* System message bar */
+#system-messages {
+  min-height: 1.2em;
+  font-size: 0.78rem;
+  color: #555;
+  text-align: center;
+  padding: 2px 0;
+  transition: opacity 0.3s;
 }
 
-/* Players Panel */
+/* Lobby body: sidebar left, columns right */
+.lobby-body {
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+}
+
+/* Sidebar */
 .players-panel {
+  width: 180px;
+  flex-shrink: 0;
   background: #1a1a1a;
   border: 1px solid #2a2a2a;
   border-radius: 12px;
@@ -204,11 +215,11 @@
 }
 
 .panel-title {
-  font-size: 0.8rem;
+  font-size: 0.75rem;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.1em;
-  color: #666;
+  color: #555;
   margin-bottom: 12px;
 }
 
@@ -222,17 +233,17 @@
 .player-item {
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 8px 10px;
+  gap: 8px;
+  padding: 7px 10px;
   border-radius: 8px;
   background: #121212;
-  font-size: 0.9rem;
+  font-size: 0.88rem;
   color: #ddd;
 }
 
 .player-dot {
-  width: 10px;
-  height: 10px;
+  width: 9px;
+  height: 9px;
   border-radius: 50%;
   flex-shrink: 0;
 }
@@ -250,130 +261,183 @@
   font-style: italic;
 }
 
-/* Feed Panel */
-.feed-panel {
+/* ===============================
+   PLAYER COLUMNS
+   =============================== */
+
+#player-columns {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  align-items: flex-start;
+  flex: 1;
+}
+
+/* Each column is exactly 2 card-widths (140px each) + gap */
+.player-col {
+  width: 300px;   /* 2 × 140px cards + 20px gap */
   background: #1a1a1a;
   border: 1px solid #2a2a2a;
   border-radius: 12px;
-  padding: 16px;
-  min-height: 400px;
-  display: flex;
-  flex-direction: column;
+  overflow: hidden;
+  flex-shrink: 0;
 }
 
-.feed-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 14px;
-}
-
-#play-feed {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  overflow-y: auto;
-  max-height: calc(100vh - 280px);
-  padding-right: 4px;
-}
-
-#play-feed::-webkit-scrollbar {
-  width: 5px;
-}
-#play-feed::-webkit-scrollbar-track {
-  background: #121212;
-  border-radius: 4px;
-}
-#play-feed::-webkit-scrollbar-thumb {
-  background: #333;
-  border-radius: 4px;
-}
-
-/* Feed Entry */
-.feed-entry {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  animation: feedIn 0.25s ease;
-}
-
-@keyframes feedIn {
-  from { opacity: 0; transform: translateY(8px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-
-.feed-entry-header {
+.col-header {
   display: flex;
   align-items: center;
   gap: 8px;
+  padding: 12px 14px;
+  background: #161616;
 }
 
-.feed-player-dot {
-  width: 8px;
-  height: 8px;
+.col-dot {
+  width: 9px;
+  height: 9px;
   border-radius: 50%;
   flex-shrink: 0;
 }
 
-.feed-username {
-  font-size: 0.8rem;
+.col-username {
+  font-size: 0.9rem;
   font-weight: 700;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.03em;
 }
 
-.feed-pile-label {
-  font-size: 0.75rem;
-  color: #555;
-  margin-left: auto;
-}
-
-.feed-timestamp {
+.col-you {
   font-size: 0.7rem;
-  color: #444;
+  font-weight: 400;
+  opacity: 0.5;
 }
 
-/* Feed cards row — same sizing as .image-card, scrolls horizontally */
-.feed-cards {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
+.col-section {
+  padding: 12px 14px;
 }
 
-.feed-card {
-  width: 140px;
-  height: 200px;
-  border-radius: 10px;
+.col-section-label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #555;
+  margin-bottom: 10px;
+}
+
+.col-divider {
+  height: 1px;
+  background: #2a2a2a;
+  margin: 0 14px;
+}
+
+.col-empty {
+  font-size: 0.82rem;
+  color: #3a3a3a;
+  padding: 4px 0;
+}
+
+/* Cards grid — 2 per row */
+.col-card-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.col-card {
+  width: 100%;
+  aspect-ratio: 5 / 7;
+  border-radius: 8px;
   overflow: hidden;
-  flex-shrink: 0;
-  box-shadow: 0 3px 10px rgba(0,0,0,0.5);
-  border: 3px solid transparent; /* colored per player */
+  border: 2px solid transparent;
   background: #1f1f1f;
-  transition: transform 0.15s ease;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+  transition: transform 0.15s;
 }
 
-.feed-card:hover {
-  transform: translateY(-3px);
+.col-card:hover {
+  transform: translateY(-2px);
 }
 
-.feed-card img {
+.col-card img {
   width: 100%;
   height: 100%;
   object-fit: contain;
   background: #1f1f1f;
 }
 
-/* Empty feed state */
-.feed-empty {
-  color: #444;
-  font-size: 0.9rem;
-  text-align: center;
-  margin: 40px auto;
+.col-play-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
 }
 
-/* "Play Cards" button injected into card page header */
+.col-pile-label {
+  font-size: 0.72rem;
+  color: #555;
+  text-transform: capitalize;
+}
+
+.col-timestamp {
+  font-size: 0.7rem;
+  color: #444;
+}
+
+/* Flip cards — smaller, 2 per row */
+.col-flip-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 10px;
+  animation: colIn 0.2s ease;
+}
+
+@keyframes colIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.col-flip-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+}
+
+.col-flip-card {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 3 / 2;
+  border-radius: 6px;
+  overflow: hidden;
+  border: 2px solid transparent;
+  background: #1f1f1f;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+}
+
+.col-flip-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  background: #1f1f1f;
+}
+
+.col-flip-card.reshuffle {
+  box-shadow: 0 0 10px rgba(255, 111, 97, 0.4);
+}
+
+.col-reshuffle-badge {
+  position: absolute;
+  bottom: 3px;
+  right: 5px;
+  font-size: 0.75rem;
+  color: #ff6f61;
+  font-weight: 700;
+  text-shadow: 0 0 4px #000;
+}
+
+/* "Play Cards" button on card page */
 #play-to-lobby-btn {
   padding: 6px 10px;
-  border: none;
+  border: 1px solid transparent;
   border-radius: 6px;
   background: #1f1f1f;
   color: #ccc;
@@ -389,6 +453,30 @@
 }
 
 #play-to-lobby-btn:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+/* "Send Flips" button on flip deck page */
+#send-flips-btn {
+  border: none;
+  border-radius: 8px;
+  background: #1f1f1f;
+  color: #ccc;
+  padding: 10px 20px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+  transition: background 0.2s, color 0.2s;
+  white-space: nowrap;
+}
+
+#send-flips-btn:hover {
+  background: #2a2a2a;
+  color: #fff;
+}
+
+#send-flips-btn:disabled {
   opacity: 0.4;
   cursor: default;
 }

@@ -51,22 +51,19 @@
       <button id="open-card-page-btn" class="btn-primary">Open Card Page ↗</button>
     </div>
 
+    <!-- Transient system messages (join/leave notices) -->
+    <div id="system-messages"></div>
+
     <div class="lobby-body">
 
-      <!-- Players panel -->
+      <!-- Players sidebar -->
       <div class="players-panel">
         <h3 class="panel-title">Players</h3>
         <ul id="players-list"></ul>
       </div>
 
-      <!-- Play feed -->
-      <div class="feed-panel">
-        <div class="feed-header">
-          <h3 class="panel-title">Play Feed</h3>
-          <button id="clear-feed-btn" class="btn-ghost">Clear</button>
-        </div>
-        <div id="play-feed"></div>
-      </div>
+      <!-- Per-player columns -->
+      <div id="player-columns"></div>
 
     </div>
   </div>

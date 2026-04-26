@@ -221,7 +221,7 @@ def lobby_ws(ws, room_id):
     # --- Message loop ---
     try:
         while True:
-            msg = ws.receive(timeout=60)
+            msg = ws.receive(timeout=300)
             if msg is None:
                 break
 
@@ -229,6 +229,9 @@ def lobby_ws(ws, room_id):
                 data = json.loads(msg)
             except json.JSONDecodeError:
                 continue
+
+            if data.get("action") == "ping":
+                continue  # keepalive, don't publish to Kafka
 
             event = {
                 "room_id": room_id,

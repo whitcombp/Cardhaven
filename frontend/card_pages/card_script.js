@@ -56,7 +56,7 @@ function postActivity(event_type, payload) {
     method: "POST",
     headers: authHeaders(),
     body: JSON.stringify({ event_type, payload })
-  }).catch(() => {}); // fire and forget
+  }).catch(() => {});
 }
 
 // ===============================
@@ -148,7 +148,7 @@ document.getElementById("logout").addEventListener("click", () => {
 // ===============================
 
 document.getElementById("open-flip-deck").addEventListener("click", () => {
-  window.open(`/flip_deck?character=${currentCharacter}`, "_blank");
+  window.open(`/flip_deck?character=${currentCharacter}${lobbyRoomId ? "&room=" + lobbyRoomId : ""}`, "_blank");
 });
 
 // ===============================
@@ -226,7 +226,6 @@ function renderCurrentPile() {
     });
 
   updatePileButtons();
-  updatePlayButton();
 }
 
 // ===============================
@@ -254,6 +253,7 @@ function toggleCardSelection(cardId) {
     selectedCardIds.add(cardId);
   }
 
+  sendSelectionToLobby();
   renderCurrentPile();
 }
 
@@ -297,15 +297,9 @@ function moveSelectedCards(toPile) {
   if (selectedCardIds.size === 0) return;
 
   const fromPileCards = piles[currentPile];
+  const movingCards = fromPileCards.filter(card => selectedCardIds.has(card.id));
 
-  const movingCards = fromPileCards.filter(card =>
-    selectedCardIds.has(card.id)
-  );
-
-  piles[currentPile] = fromPileCards.filter(
-    card => !selectedCardIds.has(card.id)
-  );
-
+  piles[currentPile] = fromPileCards.filter(card => !selectedCardIds.has(card.id));
   piles[toPile].push(...movingCards);
 
   postActivity("card_moved", {
@@ -376,14 +370,10 @@ function updatePileButtons() {
 }
 
 // ===============================
-// LOBBY — PLAY TO FEED
+// LOBBY — AUTO SEND SELECTION
 // ===============================
 
-const playBtn = document.getElementById("play-to-lobby-btn");
-
-// Only show and connect if this tab was opened from the lobby with ?room=
 if (lobbyRoomId) {
-  playBtn.classList.remove("hidden");
   initLobbyConnection(lobbyRoomId);
 }
 
@@ -395,35 +385,35 @@ function initLobbyConnection(roomId) {
 
   lobbyWs.addEventListener("open", () => {
     lobbyWs.send(JSON.stringify({ token }));
+    lobbyWs._keepalive = setInterval(() => {
+      if (lobbyWs.readyState === WebSocket.OPEN) {
+        lobbyWs.send(JSON.stringify({ action: "ping" }));
+      }
+    }, 30000);
   });
 
   lobbyWs.addEventListener("message", (e) => {
     let event;
     try { event = JSON.parse(e.data); } catch { return; }
-
     if (event.type === "joined" && event.color) {
       myLobbyColor = event.color;
-      // Tint the play button with the player's assigned color
-      playBtn.style.boxShadow = `0 0 8px ${myLobbyColor}88`;
-      playBtn.style.borderColor = myLobbyColor;
     }
   });
 
   lobbyWs.addEventListener("close", () => {
-    playBtn.disabled = true;
-    playBtn.textContent = "Disconnected";
+    clearInterval(lobbyWs._keepalive);
   });
 }
 
-playBtn.addEventListener("click", playSelectedToLobby);
-
-function playSelectedToLobby() {
+function sendSelectionToLobby() {
   if (!lobbyWs || lobbyWs.readyState !== WebSocket.OPEN) return;
   if (selectedCardIds.size === 0) return;
 
   const selectedCards = piles[currentPile]
     .filter(card => selectedCardIds.has(card.id))
     .map(card => ({ id: card.id, name: card.name, image: card.image }));
+
+  if (selectedCards.length === 0) return;
 
   lobbyWs.send(JSON.stringify({
     action: "cards_played",
@@ -433,15 +423,6 @@ function playSelectedToLobby() {
       from_pile: currentPile,
     },
   }));
-
-  playBtn.textContent = "Sent ✓";
-  setTimeout(() => { playBtn.textContent = "Play Selected ▶"; }, 1200);
-}
-
-function updatePlayButton() {
-  if (!lobbyRoomId) return; // not in a lobby session
-  const connected = lobbyWs && lobbyWs.readyState === WebSocket.OPEN;
-  playBtn.disabled = selectedCardIds.size === 0 || !connected;
 }
 
 // ===============================

@@ -1,5 +1,5 @@
 // ===============================
-// LOBBY.JS
+// LOBBY_SCRIPT.JS
 // ===============================
 
 const token    = localStorage.getItem("token");
@@ -40,21 +40,20 @@ function getPlayerColor(name) {
 // STATE
 // ===============================
 
-let ws       = null;
-let roomId   = null;
-let lobbyBase = window.location.origin; // e.g. http://localhost
+let ws     = null;
+let roomId = null;
 
 // ===============================
 // DOM
 // ===============================
 
-const roomSetupEl       = document.getElementById("room-setup");
-const roomLobbyEl       = document.getElementById("room-lobby");
-const roomCodeEl        = document.getElementById("room-code");
-const playersListEl     = document.getElementById("players-list");
-const playFeedEl        = document.getElementById("play-feed");
-const setupErrorEl      = document.getElementById("setup-error");
-const joinInput         = document.getElementById("join-room-input");
+const roomSetupEl     = document.getElementById("room-setup");
+const roomLobbyEl     = document.getElementById("room-lobby");
+const roomCodeEl      = document.getElementById("room-code");
+const playersListEl   = document.getElementById("players-list");
+const playerColumnsEl = document.getElementById("player-columns");
+const setupErrorEl    = document.getElementById("setup-error");
+const joinInput       = document.getElementById("join-room-input");
 
 document.getElementById("logout").addEventListener("click", () => {
   localStorage.clear();
@@ -81,11 +80,6 @@ document.getElementById("copy-room-btn").addEventListener("click", () => {
 
 document.getElementById("open-card-page-btn").addEventListener("click", () => {
   window.open(`/index.html?room=${roomId}`, "_blank");
-});
-
-document.getElementById("clear-feed-btn").addEventListener("click", () => {
-  playFeedEl.innerHTML = "";
-  showFeedEmpty();
 });
 
 // ===============================
@@ -125,8 +119,12 @@ function connectToRoom(id) {
   ws = new WebSocket(wsUrl);
 
   ws.addEventListener("open", () => {
-    // Auth handshake — send token as first message
     ws.send(JSON.stringify({ token }));
+    ws._keepalive = setInterval(() => {
+      if (ws.readyState === WebSocket.OPEN) {
+        ws.send(JSON.stringify({ action: "ping" }));
+      }
+    }, 30000);
   });
 
   ws.addEventListener("message", (e) => {
@@ -136,6 +134,7 @@ function connectToRoom(id) {
   });
 
   ws.addEventListener("close", () => {
+    clearInterval(ws._keepalive);
     appendSystemMessage("Disconnected from lobby.");
   });
 
@@ -151,34 +150,49 @@ function connectToRoom(id) {
 function handleLobbyEvent(event) {
   switch (event.type) {
     case "joined":
-      // Our own join confirmation — switch to lobby view
       showLobby();
-      upsertPlayer(event.username);
+      (event.players || []).forEach(p => {
+        if (p.color) playerColors[p.username] = p.color;
+        upsertPlayerSidebar(p.username);
+        ensurePlayerColumn(p.username);
+      });
       break;
 
     case "player_joined":
-      upsertPlayer(event.username);
+      if (event.color) playerColors[event.username] = event.color;
+      upsertPlayerSidebar(event.username);
+      ensurePlayerColumn(event.username);
       appendSystemMessage(`${event.username} joined.`);
       break;
 
     case "player_left":
-      removePlayer(event.username);
+      removePlayerSidebar(event.username);
       appendSystemMessage(`${event.username} left.`);
       break;
 
-    case "player_list":
-      // Full player list sent on join
-      (event.players || []).forEach(upsertPlayer);
+    case "cards_played":
+      ensurePlayerColumn(event.username);
+      updateColumnCards(event.username, event.payload?.cards || [], event.payload?.from_pile || "");
       break;
 
-    case "cards_played":
-      appendCardPlay(event);
+    case "flips_played":
+      ensurePlayerColumn(event.username);
+      prependColumnFlip(event.username, event.payload?.flips || []);
+      break;
+
+    case "flips_reshuffled":
+      clearColumnFlips(event.username);
       break;
 
     default:
-      // Generic action events published from card page
       if (event.action === "cards_played") {
-        appendCardPlay(event);
+        ensurePlayerColumn(event.username);
+        updateColumnCards(event.username, event.payload?.cards || [], event.payload?.from_pile || "");
+      } else if (event.action === "flips_played") {
+        ensurePlayerColumn(event.username);
+        prependColumnFlip(event.username, event.payload?.flips || []);
+      } else if (event.action === "flips_reshuffled") {
+        clearColumnFlips(event.username);
       }
       break;
   }
@@ -192,96 +206,141 @@ function showLobby() {
   roomSetupEl.classList.add("hidden");
   roomLobbyEl.classList.remove("hidden");
   roomCodeEl.textContent = roomId;
-  showFeedEmpty();
 }
 
 function showSetupError(msg) {
   setupErrorEl.textContent = msg;
 }
 
-function showFeedEmpty() {
-  if (playFeedEl.children.length === 0) {
-    playFeedEl.innerHTML = `<p class="feed-empty">No cards played yet. Get to it!</p>`;
-  }
+function appendSystemMessage(msg) {
+  const bar = document.getElementById("system-messages");
+  if (!bar) return;
+  bar.textContent = msg;
+  setTimeout(() => { bar.textContent = ""; }, 4000);
 }
 
 // ===============================
-// PLAYERS LIST
+// SIDEBAR PLAYERS LIST
 // ===============================
 
-function upsertPlayer(name) {
-  const existingEl = document.getElementById(`player-${CSS.escape(name)}`);
-  if (existingEl) return; // already listed
+function upsertPlayerSidebar(name) {
+  if (document.getElementById(`player-${name}`)) return;
 
   const color = getPlayerColor(name);
+  const isYou = name === username;
+
   const li = document.createElement("li");
   li.className = "player-item";
   li.id = `player-${name}`;
-
-  const isYou = name === username;
-
   li.innerHTML = `
     <span class="player-dot" style="background:${color}"></span>
     <span class="player-name">${escapeHtml(name)}</span>
     ${isYou ? `<span class="player-you">you</span>` : ""}
   `;
-
   playersListEl.appendChild(li);
 }
 
-function removePlayer(name) {
-  const el = document.getElementById(`player-${name}`);
-  if (el) el.remove();
+function removePlayerSidebar(name) {
+  document.getElementById(`player-${name}`)?.remove();
 }
 
 // ===============================
-// FEED — card play entries
+// PLAYER COLUMNS
 // ===============================
 
-function appendCardPlay(event) {
-  // Clear empty-state placeholder
-  const emptyEl = playFeedEl.querySelector(".feed-empty");
-  if (emptyEl) emptyEl.remove();
+function ensurePlayerColumn(name) {
+  if (document.getElementById(`col-${name}`)) return;
 
-  const color = getPlayerColor(event.username);
-  const cards = event.payload?.cards || [];
-  const fromPile = event.payload?.from_pile || "";
+  const color = getPlayerColor(name);
+  const isYou = name === username;
 
-  const entry = document.createElement("div");
-  entry.className = "feed-entry";
-
-  const ts = event.timestamp
-    ? new Date(event.timestamp).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })
-    : "";
-
-  entry.innerHTML = `
-    <div class="feed-entry-header">
-      <span class="feed-player-dot" style="background:${color}"></span>
-      <span class="feed-username" style="color:${color}">${escapeHtml(event.username)}</span>
-      ${fromPile ? `<span class="feed-pile-label">from ${fromPile}</span>` : ""}
-      <span class="feed-timestamp">${ts}</span>
+  const col = document.createElement("div");
+  col.className = "player-col";
+  col.id = `col-${name}`;
+  col.innerHTML = `
+    <div class="col-header" style="border-bottom:2px solid ${color}">
+      <span class="col-dot" style="background:${color}"></span>
+      <span class="col-username" style="color:${color}">
+        ${escapeHtml(name)}${isYou ? ' <span class="col-you">(you)</span>' : ''}
+      </span>
     </div>
-    <div class="feed-cards">
+
+    <div class="col-section">
+      <p class="col-section-label">Cards Played</p>
+      <div class="col-cards" id="col-cards-${name}">
+        <p class="col-empty">Waiting...</p>
+      </div>
+    </div>
+
+    <div class="col-divider"></div>
+
+    <div class="col-section">
+      <p class="col-section-label">Flips</p>
+      <div class="col-flips" id="col-flips-${name}">
+        <p class="col-empty">Waiting...</p>
+      </div>
+    </div>
+  `;
+
+  playerColumnsEl.appendChild(col);
+}
+
+// Replace card section — latest play only
+function updateColumnCards(name, cards, fromPile) {
+  const el = document.getElementById(`col-cards-${name}`);
+  if (!el) return;
+
+  const color = getPlayerColor(name);
+  const ts = new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+
+  el.innerHTML = `
+    <div class="col-play-meta">
+      ${fromPile ? `<span class="col-pile-label">from ${fromPile}</span>` : ""}
+      <span class="col-timestamp">${ts}</span>
+    </div>
+    <div class="col-card-grid">
       ${cards.map(card => `
-        <div class="feed-card" style="border-color:${color}" title="${escapeHtml(card.name)}">
+        <div class="col-card" style="border-color:${color}" title="${escapeHtml(card.name)}">
           <img src="${escapeHtml(card.image)}" alt="${escapeHtml(card.name)}" loading="lazy">
         </div>
       `).join("")}
     </div>
   `;
-
-  playFeedEl.appendChild(entry);
-
-  // Auto-scroll to latest
-  playFeedEl.scrollTop = playFeedEl.scrollHeight;
 }
 
-function appendSystemMessage(msg) {
-  const p = document.createElement("p");
-  p.style.cssText = "color:#444;font-size:0.78rem;text-align:center;padding:2px 0;";
-  p.textContent = msg;
-  playFeedEl.appendChild(p);
-  playFeedEl.scrollTop = playFeedEl.scrollHeight;
+// Prepend flip — newest at top, accumulates downward
+function prependColumnFlip(name, flips) {
+  const el = document.getElementById(`col-flips-${name}`);
+  if (!el) return;
+
+  el.querySelector(".col-empty")?.remove();
+
+  const color = getPlayerColor(name);
+  const ts = new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+
+  const group = document.createElement("div");
+  group.className = "col-flip-group";
+  group.innerHTML = `
+    <span class="col-timestamp">${ts}</span>
+    <div class="col-flip-grid">
+      ${flips.map(flip => `
+        <div class="col-flip-card ${flip.reshuffle ? "reshuffle" : ""}" style="border-color:${color}">
+          <img src="${escapeHtml(flip.card)}" alt="flip" loading="lazy">
+          ${flip.reshuffle ? `<span class="col-reshuffle-badge">↺</span>` : ""}
+        </div>
+      `).join("")}
+    </div>
+  `;
+
+  // Insert at top so newest is first
+  el.insertBefore(group, el.firstChild);
+}
+
+// Clear flip stack on reshuffle
+function clearColumnFlips(name) {
+  const el = document.getElementById(`col-flips-${name}`);
+  if (!el) return;
+  el.innerHTML = `<p class="col-empty">Waiting...</p>`;
 }
 
 // ===============================
