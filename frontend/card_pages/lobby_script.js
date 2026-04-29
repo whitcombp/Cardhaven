@@ -89,7 +89,7 @@ document.getElementById("open-card-page-btn").addEventListener("click", () => {
 async function createRoom() {
   showSetupError("");
   try {
-    const res = await fetch(`${location.protocol}//${location.hostname}:5003/lobby/create`, {
+    const res = await fetch(`/lobby/create`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -114,7 +114,7 @@ function connectToRoom(id) {
 
   // Swap ws:// / wss:// based on page protocol
   const wsProtocol = location.protocol === "https:" ? "wss" : "ws";
-  const wsUrl = `${wsProtocol}://${location.hostname}:5003/lobby/${roomId}/ws`;
+  const wsUrl = `${wsProtocol}://${location.hostname}/lobby/${roomId}/ws`;
 
   ws = new WebSocket(wsUrl);
 

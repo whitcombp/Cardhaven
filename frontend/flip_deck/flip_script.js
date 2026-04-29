@@ -59,7 +59,7 @@ if (lobbyRoomId) {
 
 function initFlipLobbyConnection(roomId) {
   const wsProtocol = location.protocol === "https:" ? "wss" : "ws";
-  const wsUrl = `${wsProtocol}://${location.hostname}:5003/lobby/${roomId}/ws`;
+  const wsUrl = `${wsProtocol}://${location.hostname}/lobby/${roomId}/ws`;
 
   lobbyWs = new WebSocket(wsUrl);
 
