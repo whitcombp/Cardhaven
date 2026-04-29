@@ -73,7 +73,7 @@ services:
     build: ./services/auth-service
     environment:
       DATABASE_URL: postgresql://auth_user:auth_pass@auth-db:5432/auth_db
-      JWT_SECRET: change-this-secret-in-production
+      JWT_SECRET: ${JWT_SECRET}
       STATS_SERVICE_URL: http://stats-service:5002
       AUTH_SERVICE_URL: http://auth-service:5001
     depends_on:
@@ -84,8 +84,8 @@ services:
     build: ./services/stats-service
     environment:
       DATABASE_URL: postgresql://stats_user:stats_pass@stats-db:5432/stats_db
-      JWT_SECRET: change-this-secret-in-production
-      ADMIN_SECRET: change-this-admin-secret-in-production
+      JWT_SECRET: ${JWT_SECRET}
+      ADMIN_SECRET: ${ADMIN_SECRET}
     depends_on:
       stats-db:
         condition: service_healthy
@@ -93,7 +93,7 @@ services:
   card-service:
     build: ./services/card-service
     environment:
-      JWT_SECRET: change-this-secret-in-production
+      JWT_SECRET: ${JWT_SECRET}
       STATS_SERVICE_URL: http://stats-service:5002
       LOBBY_SERVICE_URL: http://lobby-service:5003
     volumes:
@@ -106,7 +106,7 @@ services:
   lobby-service:
     build: ./services/lobby-service
     environment:
-      JWT_SECRET: change-this-secret-in-production
+      JWT_SECRET: ${JWT_SECRET}
       KAFKA_BROKER: kafka:9092
     depends_on:
       kafka:
