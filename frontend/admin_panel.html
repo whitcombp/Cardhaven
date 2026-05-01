@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Cardhaven — Admin</title>
+  <link rel="stylesheet" href="card_pages/card_styles.css" />
+  <style>
+    /* ===============================
+       ADMIN PANEL STYLES
+       =============================== */
+
+    .admin-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 28px;
+    }
+
+    .admin-title {
+      font-size: 1.8rem;
+      font-weight: 700;
+    }
+
+    .admin-subtitle {
+      font-size: 0.85rem;
+      color: #666;
+      margin-top: 2px;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .admin-user {
+      font-size: 0.85rem;
+      color: #666;
+    }
+
+    /* Summary cards */
+    .summary-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+
+    .summary-card {
+      background: #1a1a1a;
+      border: 1px solid #2a2a2a;
+      border-radius: 12px;
+      padding: 20px;
+    }
+
+    .summary-label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #555;
+      margin-bottom: 8px;
+    }
+
+    .summary-value {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #ff6f61;
+    }
+
+    .summary-sub {
+      font-size: 0.78rem;
+      color: #555;
+      margin-top: 4px;
+    }
+
+    /* Section */
+    .section {
+      margin-bottom: 36px;
+    }
+
+    .section-title {
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: #555;
+      margin-bottom: 14px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid #2a2a2a;
+    }
+
+    /* Tables */
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.88rem;
+    }
+
+    .data-table th {
+      text-align: left;
+      padding: 10px 14px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: #555;
+      border-bottom: 1px solid #2a2a2a;
+      white-space: nowrap;
+    }
+
+    .data-table td {
+      padding: 10px 14px;
+      border-bottom: 1px solid #1e1e1e;
+      color: #ccc;
+    }
+
+    .data-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .data-table tr:hover td {
+      background: #1f1f1f;
+    }
+
+    .table-wrap {
+      background: #1a1a1a;
+      border: 1px solid #2a2a2a;
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    /* Latency badges */
+    .latency {
+      font-family: 'Courier New', monospace;
+      font-size: 0.82rem;
+    }
+
+    .latency.fast  { color: #81c784; }
+    .latency.mid   { color: #ffb74d; }
+    .latency.slow  { color: #ff6f61; }
+
+    /* Activity type badge */
+    .event-type {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      background: #2a2a2a;
+      color: #aaa;
+    }
+
+    /* Loading / error state */
+    .state-msg {
+      text-align: center;
+      padding: 40px;
+      color: #444;
+      font-size: 0.9rem;
+    }
+
+    /* Filter row */
+    .filter-row {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 12px;
+      align-items: center;
+    }
+
+    .filter-row input,
+    .filter-row select {
+      padding: 7px 12px;
+      border-radius: 8px;
+      border: 1px solid #333;
+      background: #1a1a1a;
+      color: #ccc;
+      font-size: 0.85rem;
+    }
+
+    .filter-row input:focus,
+    .filter-row select:focus {
+      outline: none;
+      border-color: #ff6f61;
+    }
+
+    .btn-small {
+      padding: 7px 14px;
+      border: none;
+      border-radius: 8px;
+      background: #1f1f1f;
+      color: #ccc;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .btn-small:hover {
+      background: #2a2a2a;
+      color: #fff;
+    }
+
+    .btn-danger {
+      background: #2a1a1a;
+      color: #ff6f61;
+    }
+
+    .btn-danger:hover {
+      background: #3a1a1a;
+    }
+  </style>
+</head>
+<body>
+<div class="app">
+
+  <header class="admin-header">
+    <div>
+      <h1 class="admin-title">Admin Panel</h1>
+      <p class="admin-subtitle">Cardhaven usage statistics</p>
+    </div>
+    <div class="header-actions">
+      <span class="admin-user" id="admin-username"></span>
+      <button class="btn-small" id="refresh-btn">↻ Refresh</button>
+      <button class="btn-small btn-danger" id="logout-btn">Logout</button>
+    </div>
+  </header>
+
+  <!-- Summary row -->
+  <div class="summary-row" id="summary-row">
+    <div class="summary-card">
+      <p class="summary-label">Total API Calls</p>
+      <p class="summary-value" id="sum-total-calls">—</p>
+    </div>
+    <div class="summary-card">
+      <p class="summary-label">Unique Users</p>
+      <p class="summary-value" id="sum-unique-users">—</p>
+    </div>
+    <div class="summary-card">
+      <p class="summary-label">Avg Latency</p>
+      <p class="summary-value" id="sum-avg-latency">—</p>
+      <p class="summary-sub">ms across all endpoints</p>
+    </div>
+    <div class="summary-card">
+      <p class="summary-label">Total Activities</p>
+      <p class="summary-value" id="sum-total-activities">—</p>
+    </div>
+  </div>
+
+  <!-- API Stats -->
+  <div class="section">
+    <p class="section-title">API Usage — per user per endpoint</p>
+    <div class="filter-row">
+      <input type="text" id="api-filter" placeholder="Filter by username or endpoint..." />
+    </div>
+    <div class="table-wrap">
+      <table class="data-table" id="api-table">
+        <thead>
+          <tr>
+            <th>User</th>
+            <th>Endpoint</th>
+            <th>Method</th>
+            <th>Hits</th>
+            <th>Avg ms</th>
+            <th>Min ms</th>
+            <th>Max ms</th>
+          </tr>
+        </thead>
+        <tbody id="api-tbody">
+          <tr><td colspan="7" class="state-msg">Loading...</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Activity Summary -->
+  <div class="section">
+    <p class="section-title">Activity Summary — per user per event type</p>
+    <div class="table-wrap">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>User</th>
+            <th>Event Type</th>
+            <th>Count</th>
+          </tr>
+        </thead>
+        <tbody id="activity-summary-tbody">
+          <tr><td colspan="3" class="state-msg">Loading...</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Recent Events -->
+  <div class="section">
+    <p class="section-title">Recent Activity Events</p>
+    <div class="filter-row">
+      <input type="text" id="activity-user-filter" placeholder="Filter by username..." />
+      <select id="activity-type-filter">
+        <option value="">All event types</option>
+        <option value="character_loaded">character_loaded</option>
+        <option value="card_moved">card_moved</option>
+        <option value="deck_flipped">deck_flipped</option>
+        <option value="deck_reshuffled">deck_reshuffled</option>
+      </select>
+      <button class="btn-small" id="activity-filter-btn">Apply</button>
+    </div>
+    <div class="table-wrap">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Time</th>
+            <th>User</th>
+            <th>Event</th>
+            <th>Details</th>
+          </tr>
+        </thead>
+        <tbody id="activity-recent-tbody">
+          <tr><td colspan="4" class="state-msg">Loading...</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  // ===============================
+  // AUTH GUARD
+  // ===============================
+
+  const token = localStorage.getItem("token");
+  const isAdmin = localStorage.getItem("is_admin") === "true";
+
+  if (!token || !isAdmin) {
+    window.location.href = "/login.html";
+  }
+
+  document.getElementById("admin-username").textContent = localStorage.getItem("username") || "";
+
+  function authHeaders() {
+    return {
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${token}`
+    };
+  }
+
+  document.getElementById("logout-btn").addEventListener("click", () => {
+    localStorage.clear();
+    window.location.href = "/login.html";
+  });
+
+  // ===============================
+  // DATA FETCHING
+  // ===============================
+
+  let apiData = [];
+  let activityData = { summary: [], recent_events: [] };
+
+  async function loadStats() {
+    try {
+      const res = await fetch("/admin/data/stats", { headers: authHeaders() });
+      if (res.status === 401) { window.location.href = "/login.html"; return; }
+      apiData = await res.json();
+      renderApiTable(apiData);
+      renderSummary();
+    } catch (e) {
+      document.getElementById("api-tbody").innerHTML =
+        `<tr><td colspan="7" class="state-msg">Failed to load API stats.</td></tr>`;
+    }
+  }
+
+  async function loadActivity(username = "", eventType = "") {
+    try {
+      const params = new URLSearchParams({ limit: 100 });
+      if (username) params.set("username", username);
+      if (eventType) params.set("event_type", eventType);
+
+      const res = await fetch(`/admin/data/activity?${params}`, { headers: authHeaders() });
+      if (res.status === 401) { window.location.href = "/login.html"; return; }
+      activityData = await res.json();
+      renderActivitySummary(activityData.summary);
+      renderRecentActivity(activityData.recent_events);
+    } catch (e) {
+      document.getElementById("activity-recent-tbody").innerHTML =
+        `<tr><td colspan="4" class="state-msg">Failed to load activity.</td></tr>`;
+    }
+  }
+
+  // ===============================
+  // SUMMARY ROW
+  // ===============================
+
+  function renderSummary() {
+    const totalCalls = apiData.reduce((s, r) => s + r.hits, 0);
+    const uniqueUsers = new Set(apiData.map(r => r.username)).size;
+    const avgLatency = apiData.length
+      ? (apiData.reduce((s, r) => s + r.avg_latency_ms * r.hits, 0) / totalCalls).toFixed(1)
+      : "—";
+    const totalActivities = activityData.summary.reduce((s, r) => s + r.count, 0);
+
+    document.getElementById("sum-total-calls").textContent = totalCalls.toLocaleString();
+    document.getElementById("sum-unique-users").textContent = uniqueUsers;
+    document.getElementById("sum-avg-latency").textContent = avgLatency;
+    document.getElementById("sum-total-activities").textContent = totalActivities.toLocaleString();
+  }
+
+  // ===============================
+  // API TABLE
+  // ===============================
+
+  function latencyClass(ms) {
+    if (ms < 100) return "fast";
+    if (ms < 500) return "mid";
+    return "slow";
+  }
+
+  function renderApiTable(data) {
+    const tbody = document.getElementById("api-tbody");
+    if (!data.length) {
+      tbody.innerHTML = `<tr><td colspan="7" class="state-msg">No data yet.</td></tr>`;
+      return;
+    }
+
+    tbody.innerHTML = data.map(r => `
+      <tr>
+        <td>${escHtml(r.username)}</td>
+        <td>${escHtml(r.endpoint)}</td>
+        <td>${escHtml(r.method)}</td>
+        <td>${r.hits.toLocaleString()}</td>
+        <td><span class="latency ${latencyClass(r.avg_latency_ms)}">${r.avg_latency_ms}</span></td>
+        <td><span class="latency ${latencyClass(r.min_latency_ms)}">${r.min_latency_ms}</span></td>
+        <td><span class="latency ${latencyClass(r.max_latency_ms)}">${r.max_latency_ms}</span></td>
+      </tr>
+    `).join("");
+  }
+
+  // Client-side filter for API table
+  document.getElementById("api-filter").addEventListener("input", (e) => {
+    const q = e.target.value.toLowerCase();
+    const filtered = apiData.filter(r =>
+      r.username.toLowerCase().includes(q) ||
+      r.endpoint.toLowerCase().includes(q)
+    );
+    renderApiTable(filtered);
+  });
+
+  // ===============================
+  // ACTIVITY SUMMARY TABLE
+  // ===============================
+
+  function renderActivitySummary(summary) {
+    const tbody = document.getElementById("activity-summary-tbody");
+    if (!summary.length) {
+      tbody.innerHTML = `<tr><td colspan="3" class="state-msg">No activity yet.</td></tr>`;
+      return;
+    }
+
+    tbody.innerHTML = summary.map(r => `
+      <tr>
+        <td>${escHtml(r.username)}</td>
+        <td><span class="event-type">${escHtml(r.event_type)}</span></td>
+        <td>${r.count.toLocaleString()}</td>
+      </tr>
+    `).join("");
+  }
+
+  // ===============================
+  // RECENT EVENTS TABLE
+  // ===============================
+
+  function renderRecentActivity(events) {
+    const tbody = document.getElementById("activity-recent-tbody");
+    if (!events.length) {
+      tbody.innerHTML = `<tr><td colspan="4" class="state-msg">No recent events.</td></tr>`;
+      return;
+    }
+
+    tbody.innerHTML = events.map(e => {
+      const ts = new Date(e.timestamp).toLocaleString();
+      const payload = typeof e.payload === "string"
+        ? JSON.parse(e.payload)
+        : (e.payload || {});
+      const details = formatPayload(e.event_type, payload);
+
+      return `
+        <tr>
+          <td style="white-space:nowrap;color:#555">${ts}</td>
+          <td>${escHtml(e.username)}</td>
+          <td><span class="event-type">${escHtml(e.event_type)}</span></td>
+          <td style="color:#666;font-size:0.82rem">${details}</td>
+        </tr>
+      `;
+    }).join("");
+  }
+
+  function formatPayload(eventType, payload) {
+    switch (eventType) {
+      case "character_loaded":
+        return `character: ${escHtml(payload.character || "")}`;
+      case "card_moved":
+        return `${escHtml(payload.from_pile || "")} → ${escHtml(payload.to_pile || "")}` +
+          (payload.card_name ? ` — ${escHtml(payload.card_name)}` : ` (${payload.count || 1} cards)`);
+      case "deck_flipped":
+        return `deck size: ${payload.deck_size ?? "?"}` +
+          (payload.reshuffle_triggered ? " ↺ reshuffle" : "");
+      case "deck_reshuffled":
+        return `deck size: ${payload.deck_size ?? "?"}`;
+      default:
+        return JSON.stringify(payload).slice(0, 80);
+    }
+  }
+
+  // ===============================
+  // ACTIVITY FILTER
+  // ===============================
+
+  document.getElementById("activity-filter-btn").addEventListener("click", () => {
+    const username = document.getElementById("activity-user-filter").value.trim();
+    const eventType = document.getElementById("activity-type-filter").value;
+    loadActivity(username, eventType);
+  });
+
+  // ===============================
+  // REFRESH
+  // ===============================
+
+  document.getElementById("refresh-btn").addEventListener("click", () => {
+    loadStats();
+    loadActivity();
+  });
+
+  // ===============================
+  // UTIL
+  // ===============================
+
+  function escHtml(str) {
+    return String(str || "")
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;");
+  }
+
+  // ===============================
+  // INIT
+  // ===============================
+
+  loadStats();
+  loadActivity();
+</script>
+
+</body>
+</html>

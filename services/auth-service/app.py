@@ -6,6 +6,51 @@ import jwt
 import os
 from datetime import datetime, timedelta, timezone
 
+JWT_SECRET = os.environ.get("JWT_SECRET", "dev-secret-change-in-production")
+JWT_EXPIRY_HOURS = 24
+
+
+# ===============================
+# ADMIN SEEDING
+# ===============================
+
+
+def _seed_admins():
+    """
+    Reads ADMIN_USERS from env — comma-separated username:password pairs.
+    Example: ADMIN_USERS=alice:pass1,bob:pass2
+    Creates or updates these accounts with is_admin=True on every startup.
+    """
+    admin_users_raw = os.environ.get("ADMIN_USERS", "")
+    if not admin_users_raw.strip():
+        return
+
+    for entry in admin_users_raw.split(","):
+        entry = entry.strip()
+        if ":" not in entry:
+            continue
+        username, password = entry.split(":", 1)
+        username = username.strip()
+        password = password.strip()
+        if not username or not password:
+            continue
+
+        existing = User.query.filter_by(username=username).first()
+        if existing:
+            # Update password and ensure admin flag is set
+            existing.password_hash = generate_password_hash(password)
+            existing.is_admin = True
+        else:
+            user = User(
+                username=username,
+                password_hash=generate_password_hash(password),
+                is_admin=True,
+            )
+            db.session.add(user)
+
+    db.session.commit()
+
+
 app = Flask(__name__)
 
 app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get(
@@ -13,13 +58,12 @@ app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get(
 )
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
-JWT_SECRET = os.environ.get("JWT_SECRET", "dev-secret-change-in-production")
-JWT_EXPIRY_HOURS = 24
-
 db.init_app(app)
 
 with app.app_context():
     db.create_all()
+    _seed_admins()
+
 
 # ===============================
 # HELPERS
@@ -30,6 +74,7 @@ def make_token(user):
     payload = {
         "user_id": user.id,
         "username": user.username,
+        "is_admin": user.is_admin,
         "exp": datetime.now(timezone.utc) + timedelta(hours=JWT_EXPIRY_HOURS),
     }
     return jwt.encode(payload, JWT_SECRET, algorithm="HS256")
@@ -56,7 +101,12 @@ def register():
     if User.query.filter_by(username=username).first():
         return jsonify({"error": "Username already taken"}), 409
 
-    user = User(username=username, password_hash=generate_password_hash(password))
+    # Prevent registering as admin username
+    user = User(
+        username=username,
+        password_hash=generate_password_hash(password),
+        is_admin=False,
+    )
     db.session.add(user)
     db.session.commit()
 
@@ -88,13 +138,24 @@ def validate():
     try:
         payload = decode_token(token)
         return (
-            jsonify({"user_id": payload["user_id"], "username": payload["username"]}),
+            jsonify(
+                {
+                    "user_id": payload["user_id"],
+                    "username": payload["username"],
+                    "is_admin": payload.get("is_admin", False),
+                }
+            ),
             200,
         )
     except jwt.ExpiredSignatureError:
         return jsonify({"error": "Token expired"}), 401
     except jwt.InvalidTokenError:
         return jsonify({"error": "Invalid token"}), 401
+
+
+@app.route("/health")
+def health():
+    return jsonify({"status": "ok"}), 200
 
 
 # ===============================

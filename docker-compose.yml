@@ -45,6 +45,7 @@ services:
     depends_on:
       - card-service
       - lobby-service
+      - admin-service
 
   zookeeper:
     image: confluentinc/cp-zookeeper:7.5.0
@@ -69,11 +70,22 @@ services:
       timeout: 5s
       retries: 10
 
+  admin-service:
+    build: ./services/admin-service
+    environment:
+      JWT_SECRET: ${JWT_SECRET}
+      STATS_SERVICE_URL: http://stats-service:5002
+      AUTH_SERVICE_URL: http://auth-service:5001
+    depends_on:
+      - auth-service
+      - stats-service
+
   auth-service:
     build: ./services/auth-service
     environment:
       DATABASE_URL: postgresql://auth_user:auth_pass@auth-db:5432/auth_db
       JWT_SECRET: ${JWT_SECRET}
+      ADMIN_USERS: ${ADMIN_USERS:-}
       STATS_SERVICE_URL: http://stats-service:5002
       AUTH_SERVICE_URL: http://auth-service:5001
     depends_on:
@@ -85,7 +97,6 @@ services:
     environment:
       DATABASE_URL: postgresql://stats_user:stats_pass@stats-db:5432/stats_db
       JWT_SECRET: ${JWT_SECRET}
-      ADMIN_SECRET: ${ADMIN_SECRET}
     depends_on:
       stats-db:
         condition: service_healthy

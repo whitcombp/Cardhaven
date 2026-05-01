@@ -88,6 +88,11 @@ def login_page():
     return send_from_directory(FRONTEND, "login.html")
 
 
+@app.route("/admin_panel.html")
+def admin_panel():
+    return send_from_directory(FRONTEND, "admin_panel.html")
+
+
 @app.route("/card_pages/<path:filename>")
 def card_pages(filename):
     return send_from_directory(FRONTEND + "/card_pages", filename)

@@ -129,8 +129,6 @@
 </div>
 
 <script>
-  const AUTH_URL = "";
-
   const usernameInput = document.getElementById("username");
   const passwordInput = document.getElementById("password");
   const errorEl = document.getElementById("login-error");
@@ -149,7 +147,7 @@
     }
 
     try {
-      const res = await fetch(`${AUTH_URL}/${endpoint}`, {
+      const res = await fetch(`/${endpoint}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username, password })
@@ -165,7 +163,14 @@
       localStorage.setItem("token", data.token);
       localStorage.setItem("username", data.user.username);
       localStorage.setItem("user_id", data.user.id);
-      window.location.href = "/";
+      localStorage.setItem("is_admin", data.user.is_admin ? "true" : "false");
+
+      // Redirect based on role
+      if (data.user.is_admin) {
+        window.location.href = "/admin_panel.html";
+      } else {
+        window.location.href = "/";
+      }
 
     } catch (err) {
       showError("Could not reach auth service.");
@@ -184,7 +189,8 @@
 
   // Redirect if already logged in
   if (localStorage.getItem("token")) {
-    window.location.href = "/";
+    const isAdmin = localStorage.getItem("is_admin") === "true";
+    window.location.href = isAdmin ? "/admin_panel.html" : "/";
   }
 </script>
 
